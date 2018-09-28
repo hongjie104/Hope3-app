@@ -1,0 +1,3 @@
+rootProject.name = 'HopeApp'
+
+include ':app'
