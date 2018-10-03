@@ -7,8 +7,17 @@
     "test": "jest"
   },
   "dependencies": {
+    "@remobile/react-native-cordova": "^1.1.1",
+    "@remobile/react-native-file-transfer": "^1.0.8",
+    "@remobile/react-native-toast": "^1.0.7",
+    "@remobile/react-native-zip": "^1.0.5",
+    "mobx": "^5.5.0",
+    "mobx-react": "^5.2.8",
     "react": "16.5.0",
-    "react-native": "0.57.1"
+    "react-native": "0.57.1",
+    "react-native-device-info": "^0.22.6",
+    "react-native-fs": "^2.11.17",
+    "react-navigation": "^2.17.0"
   },
   "devDependencies": {
     "@babel/core": "^7.1.0",
