@@ -17,6 +17,7 @@
     "react-native": "0.57.1",
     "react-native-device-info": "^0.22.6",
     "react-native-fs": "^2.11.17",
+    "react-native-swiper": "^1.5.13",
     "react-navigation": "^2.17.0"
   },
   "devDependencies": {

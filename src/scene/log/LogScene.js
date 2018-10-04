@@ -32,6 +32,9 @@ export default class LogScene extends Component {
 		const { logArr } = this.props;
 		return (
 			<View style={styles.container}>
+				<Text style={{}}>
+					log Scene
+				</Text>
 				<ScrollView style={styles.container}>
 					{
 						logArr.arr.map(this.renderLog)

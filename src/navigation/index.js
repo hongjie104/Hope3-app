@@ -1,7 +1,8 @@
 'use strict';
 
 import {Animated, Easing} from 'react-native'
-import { TabNavigator, StackNavigator } from 'react-navigation';
+// import { TabNavigator, StackNavigator } from 'react-navigation';
+import { createBottomTabNavigator, StackNavigator } from 'react-navigation';
 
 import TestScene1 from '../scene/test/TestScene1';
 import TestScene2 from '../scene/test/TestScene2';
@@ -9,23 +10,46 @@ import TestScene3 from '../scene/test/TestScene3';
 
 import LogScene from '../scene/log/LogScene';
 import MainScene from '../scene/main/MainScene';
+import ShoesDetailScene from '../scene/shoes/DetailScene';
 
 // import StackViewStyleInterpolator from 'react-navigation/src/views/StackView/StackViewStyleInterpolator';
 import StackViewStyleInterpolator from "react-navigation-stack/dist/views/StackView/StackViewStyleInterpolator";
 
-const TabNavigation = TabNavigator({
+const TabNavigation = createBottomTabNavigator({
 	HomeTab: { screen: MainScene },
 	CheckinTab: { screen: LogScene },
 }, {
-	animationEnabled: false,
-	tabBarPosition: 'bottom',
-	swipeEnabled: false,
-	backBehavior: 'none',
+	// animationEnabled: false,
+	// tabBarPosition: 'bottom',
+	// swipeEnabled: false,
+	// backBehavior: 'none',
+	navigationOptions: ({ navigation }) => ({
+		// tabBarIcon: ({ focused, tintColor }) => {
+		// 	const { routeName } = navigation.state;
+		// 	let iconName;
+		// 	if (routeName === 'Home') {
+		// 		iconName = `ios-information-circle${focused ? '' : '-outline'}`;
+		// 	} else if (routeName === 'Settings') {
+		// 		iconName = `ios-options${focused ? '' : '-outline'}`;
+		// 	}
+
+		// 	// You can return any component that you like here! We usually use an
+		// 	// icon component from react-native-vector-icons
+		// 	return <Ionicons name={iconName} size={25} color={tintColor} />;
+		// },
+	}),
+	tabBarOptions: {
+		activeTintColor: 'tomato',
+		inactiveTintColor: 'gray',
+	},
 });
 
 export default StackNavigator({
 	'main': {
-		screen: TabNavigation
+		screen: TabNavigation,
+	},
+	'shoesDetail': {
+		screen: ShoesDetailScene,
 	},
 	'test1': {
 		screen: TestScene1
@@ -40,8 +64,8 @@ export default StackNavigator({
 	// 	screen: LogScene
 	// }
 }, {
-	initialRouteName: 'test1',
-	// initialRouteName: 'main',
+	// initialRouteName: 'test1',
+	initialRouteName: 'main',
 	// mode: 'card',
 	// headerMode: 'none',
 	transitionConfig: () => {
