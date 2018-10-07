@@ -72,7 +72,6 @@ export function get(url, successCallback, errorCallback = null) {
     timeout(fetch(url), TIME_OUT)
     .then(response => response.text())
     .then((responseText) => {
-        // successCallback(JSON.parse(responseText));
         // on success
         successCallback(JSON.parse(responseText));
     })
