@@ -165,7 +165,13 @@ export default class MainScene extends PureComponent {
 
 	onShoesPressed() {
 		const { navigate } = this.props.navigation;
-		navigate('shoesDetail');
+		// navigate('shoesDetail', {
+		// 	mode: 'modal',
+		// });
+		navigate({
+			routeName: 'shoesDetail',
+			params: { mode: 'modal' },
+		});
 	}
 
 	test() {

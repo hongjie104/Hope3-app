@@ -1,6 +1,6 @@
 'use strict';
 
-import {Animated, Easing} from 'react-native'
+import { Platform } from 'react-native'
 // import { TabNavigator, StackNavigator } from 'react-navigation';
 import { createBottomTabNavigator, StackNavigator } from 'react-navigation';
 
@@ -68,7 +68,17 @@ export default StackNavigator({
 	initialRouteName: 'main',
 	// mode: 'card',
 	// headerMode: 'none',
-	transitionConfig: () => {
+	transitionConfig: (transitionProps, prevTransitionProps, isModal) => {
+		const { scenes } = transitionProps;
+		const { params } = scenes[scenes.length - 1].route;
+		if (params && params.mode === 'modal') {
+			return {
+				screenInterpolator: Platform.select({
+					ios: StackViewStyleInterpolator.forVertical,
+					android: StackViewStyleInterpolator.forFadeFromBottomAndroid,
+				}),
+			};
+		}
 		return {
 			screenInterpolator: StackViewStyleInterpolator.forHorizontal,
 		};
