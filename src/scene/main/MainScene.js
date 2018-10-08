@@ -11,7 +11,7 @@ import {
 
 import Swiper from 'react-native-swiper';
 import { toDips } from '../../utils/dimensions';
-import { fetchShoesArr } from '../../service';
+import { fetchGoodsTypeArr } from '../../service';
 
 export default class MainScene extends PureComponent {
 	
@@ -169,7 +169,7 @@ export default class MainScene extends PureComponent {
 	}
 
 	test() {
-		fetchShoesArr();
+		fetchGoodsTypeArr();
 	}
 }
 
