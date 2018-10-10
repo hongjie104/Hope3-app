@@ -16,7 +16,7 @@ import { fetchGoodsTypeArr } from '../../service';
 export default class MainScene extends PureComponent {
 	
 	static navigationOptions = ({ navigation, screenProps }) => ({
-		title: `main scene`,
+		title: 'main scene',
 	});
 
 	constructor(props) {
@@ -170,7 +170,7 @@ export default class MainScene extends PureComponent {
 		// });
 		navigate({
 			routeName: 'shoesDetail',
-			params: { mode: 'modal' },
+			// params: { mode: 'modal' },
 		});
 	}
 

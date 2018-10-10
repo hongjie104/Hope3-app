@@ -11,8 +11,9 @@ export default class PageList {
 		});
 	}
 
+	// defaults to true, waiting first refresh.
 	@observable
-	isFetching = true;  // defaults to true, waiting first refresh.
+	isFetching = true;
 
 	@observable
 	isRefreshing = false;

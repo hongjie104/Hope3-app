@@ -11,6 +11,7 @@ import TestScene3 from '../scene/test/TestScene3';
 import LogScene from '../scene/log/LogScene';
 import MainScene from '../scene/main/MainScene';
 import ShoesDetailScene from '../scene/shoes/DetailScene';
+import ShoesSizeSelector from '../scene/shoes/SizeSelector';
 
 // import StackViewStyleInterpolator from 'react-navigation/src/views/StackView/StackViewStyleInterpolator';
 import StackViewStyleInterpolator from "react-navigation-stack/dist/views/StackView/StackViewStyleInterpolator";
@@ -50,6 +51,9 @@ export default StackNavigator({
 	},
 	'shoesDetail': {
 		screen: ShoesDetailScene,
+	},
+	'shoesSizeSelector': {
+		screen: ShoesSizeSelector,
 	},
 	'test1': {
 		screen: TestScene1
