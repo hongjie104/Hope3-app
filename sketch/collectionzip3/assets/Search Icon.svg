@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.3 (57544) - http://www.bohemiancoding.com/sketch -->
+    <title>Search Icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="new-home" transform="translate(-19.000000, -31.000000)" fill="#CCCCCC" fill-rule="nonzero">
+            <g id="Search-bar" transform="translate(11.000000, 26.000000)">
+                <path d="M19.8047047,18.3667861 C17.0327002,20.4153663 13.1120994,20.3048806 10.4508502,17.9091591 C7.41076686,15.1724017 7.16531516,10.4898385 9.90261854,7.45036142 C12.6399219,4.41088438 17.3234193,4.16548164 20.3635027,6.90223906 C23.2235736,9.47694491 23.6101714,13.773845 21.3666509,16.8045695 L25.8908101,21.3287286 L24.3287286,22.8908101 L19.8047047,18.3667861 Z M19.3293875,15.8888294 C21.5192302,13.4572478 21.3228688,9.71119718 18.8908021,7.52179125 C16.4587354,5.33238532 12.7119375,5.52870751 10.5220948,7.96028914 C8.33225213,10.3918708 8.52861349,14.1379213 10.9606802,16.3273273 C13.3927469,18.5167332 17.1395448,18.320411 19.3293875,15.8888294 Z" id="Search-Icon"></path>
+            </g>
+        </g>
+    </g>
+</svg>

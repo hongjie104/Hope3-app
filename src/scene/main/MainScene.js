@@ -7,11 +7,13 @@ import {
 	Text,
 	Image,
 	TouchableOpacity,
+	FlatList,
 } from 'react-native';
 
 import Swiper from 'react-native-swiper';
-import { toDips } from '../../utils/dimensions';
-import { fetchGoodsTypeArr } from '../../service';
+import { toDips, getFontSize } from '../../utils/dimensions';
+import { getTopSeries } from '../../service';
+import { IMG_HOST } from '../../config';
 
 export default class MainScene extends PureComponent {
 	
@@ -21,10 +23,126 @@ export default class MainScene extends PureComponent {
 
 	constructor(props) {
 		super(props);
+		this.state = {
+			topSeriesArr: [],
+			mostPopularShoesArr: [
+				{
+					img: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
+					name: 'Air Jordan',
+					price: '890',
+					id: 1,
+				},
+				{
+					img: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
+					name: 'Air Jordan',
+					price: '890',
+					id: 2,
+				},
+				{
+					img: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
+					name: 'Air Jordan',
+					price: '890',
+					id: 3,
+				},
+				{
+					img: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
+					name: 'Air Jordan',
+					price: '890',
+					id: 4,
+				},
+				{
+					img: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
+					name: 'Air Jordan',
+					price: '890',
+					id: 5,
+				},
+				{
+					img: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
+					name: 'Air Jordan',
+					price: '890',
+					id: 6,
+				},
+			],
+			featuredShoesArr: [
+				{
+					img: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
+					name: 'Air Jordan',
+					price: '890',
+					numShops: 20,
+					id: 1,
+					key: '1',
+				},
+				{
+					img: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
+					name: 'Air Jordan',
+					price: '890',
+					numShops: 20,
+					id: 2,
+					key: '2',
+				},
+				{
+					img: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
+					name: 'Air Jordan',
+					price: '890',
+					numShops: 20,
+					id: 3,
+					key: '3',
+				},
+				{
+					img: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
+					name: 'Air Jordan',
+					price: '890',
+					numShops: 20,
+					id: 4,
+					key: '4',
+				},
+				{
+					img: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
+					name: 'Air Jordan',
+					price: '890',
+					numShops: 20,
+					id: 5,
+					key: '5',
+				},
+				{
+					img: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
+					name: 'Air Jordan',
+					price: '890',
+					numShops: 20,
+					id: 6,
+					key: '6',
+				},
+				{
+					img: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
+					name: 'Air Jordan',
+					price: '890',
+					numShops: 20,
+					id: 7,
+					key: '7',
+				},
+				{
+					img: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
+					name: 'Air Jordan',
+					price: '890',
+					numShops: 20,
+					id: 8,
+					key: '8',
+				},
+			],
+		};
 	}
 
-	render() {
-		const { navigate, goBack } = this.props.navigation;
+	async componentDidMount() {
+		// 获取置顶的系列
+		const { success, data } = await getTopSeries();
+		this.setState({
+			topSeriesArr: data,
+		});
+	}
+
+
+	renderHeader() {
+		const { topSeriesArr, mostPopularShoesArr } = this.state;
 		return (
 			<View style={styles.container}>
 				{
@@ -38,13 +156,13 @@ export default class MainScene extends PureComponent {
 						activeDotStyle={styles.swiperDot}
 					 	autoplay
 					 >
-					 	<TouchableOpacity activeOpacity={0.8} onPress={() => { this.test && this.test()}}>
+					 	<TouchableOpacity activeOpacity={0.8} onPress={() => { }}>
 							<Image style={styles.swiperImg} source={require('../../imgs/banner_1.jpg')}/>
 						</TouchableOpacity>
-						<TouchableOpacity activeOpacity={0.8} onPress={() => { this.test && this.test()}}>
+						<TouchableOpacity activeOpacity={0.8} onPress={() => { }}>
 							<Image style={styles.swiperImg} source={require('../../imgs/banner_2.jpg')}/>
 						</TouchableOpacity>
-						<TouchableOpacity activeOpacity={0.8} onPress={() => { this.test && this.test()}}>
+						<TouchableOpacity activeOpacity={0.8} onPress={() => { }}>
 							<Image style={styles.swiperImg} source={require('../../imgs/banner_3.jpg')}/>
 						</TouchableOpacity>
 					</Swiper>
@@ -52,114 +170,148 @@ export default class MainScene extends PureComponent {
 				{
 					// top styles
 				}
-				<View style={styles.topStyleContainer}>
-					<Text style={styles.topStyleTxt}>
-						Top Styles
-					</Text>
-					<View style={styles.shoesContainer}>
-						<View style={styles.shoesRowContainer}>
+				<Text style={styles.headerTxt}>
+					Top Styles
+				</Text>
+				<View style={styles.topShoesContainer}>
+					{
+						topSeriesArr.map((goods, i) => (
 							<TouchableOpacity
 								activeOpacity={0.8}
-								onPress={() => { this.onShoesPressed(); }}
-								style={{}}
+								onPress={() => { this.onShoesPressed(goods._id); }}
+								style={styles.topShoesCell}
+								key={`item${i}`}
 							>
-								<View style={styles.shoesCell}>
-									<Image style={styles.shoesImg} source={{ uri: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600' }} />
-									<Text style={styles.shoesName}>
-										Air Jordan
-									</Text>
-								</View>
+								<Image style={styles.topShoesImg} source={{ uri: `${IMG_HOST}/${goods.img}` }} />
+								<Text style={styles.topShoesName}>
+									{ goods.name }
+								</Text>
 							</TouchableOpacity>
+						))
+					}
+					{
+						// more
+					}
+					<TouchableOpacity
+						activeOpacity={0.8}
+						onPress={() => { }}
+						style={styles.topShoesCell}
+					>
+						<View style={styles.topShoesMore}>
+							<Text style={styles.topShoesMoreText}>
+								MORE
+							</Text>
+						</View>	
+					</TouchableOpacity>
+				</View>
+				{
+					// Most Popular
+				}
+				<Text style={styles.headerTxt}>
+					Most Popular
+				</Text>
+				<View style={styles.mostPopularShoesContainer}>
+					{
+						mostPopularShoesArr.map((goods, i) => (
 							<TouchableOpacity
 								activeOpacity={0.8}
-								onPress={() => { this.onShoesPressed(); }}
-								style={{}}
+								onPress={() => {}}
+								style={styles.mostPopularShoesCell}
+								key={`item1 ${i}`}
 							>
-								<View style={styles.shoesCell}>
-									<Image style={styles.shoesImg} source={{ uri: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600' }} />
-									<Text style={styles.shoesName}>
-										Air Jordan
-									</Text>
-								</View>
+								<Image style={styles.mostPopularShoesImg} source={{ uri: goods.img }} />
+								<Text style={styles.mostPopularShoesName} numberOfLines={2}>
+									{ goods.name }
+								</Text>
+								<Text style={styles.mostPopularShoesPrice}>
+									${ goods.price }
+								</Text>
 							</TouchableOpacity>
-							<TouchableOpacity
-								activeOpacity={0.8}
-								onPress={() => { this.onShoesPressed(); }}
-								style={{}}
-							>
-								<View style={styles.shoesCell}>
-									<Image style={styles.shoesImg} source={{ uri: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600' }} />
-									<Text style={styles.shoesName}>
-										Air Jordan
-									</Text>
-								</View>
-							</TouchableOpacity>
-							<TouchableOpacity
-								activeOpacity={0.8}
-								onPress={() => { this.onShoesPressed(); }}
-								style={{}}
-							>
-								<View style={styles.shoesCell}>
-									<Image style={styles.shoesImg} source={{ uri: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600' }} />
-									<Text style={styles.shoesName}>
-										Air Jordan
-									</Text>
-								</View>
-							</TouchableOpacity>
-						</View>
-						<View style={styles.shoesRowContainer}>
-							<TouchableOpacity
-								activeOpacity={0.8}
-								onPress={() => { this.onShoesPressed(); }}
-								style={{}}
-							>
-								<View style={styles.shoesCell}>
-									<Image style={styles.shoesImg} source={{ uri: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600' }} />
-									<Text style={styles.shoesName}>
-										Air Jordan
-									</Text>
-								</View>
-							</TouchableOpacity>
-							<TouchableOpacity
-								activeOpacity={0.8}
-								onPress={() => { this.onShoesPressed(); }}
-								style={{}}
-							>
-								<View style={styles.shoesCell}>
-									<Image style={styles.shoesImg} source={{ uri: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600' }} />
-									<Text style={styles.shoesName}>
-										Air Jordan
-									</Text>
-								</View>
-							</TouchableOpacity>
-							<TouchableOpacity
-								activeOpacity={0.8}
-								onPress={() => { this.onShoesPressed(); }}
-								style={{}}
-							>
-								<View style={styles.shoesCell}>
-									<Image style={styles.shoesImg} source={{ uri: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600' }} />
-									<Text style={styles.shoesName}>
-										Air Jordan
-									</Text>
-								</View>
-							</TouchableOpacity>
-							<TouchableOpacity
-								activeOpacity={0.8}
-								onPress={() => { this.onShoesPressed(); }}
-								style={{}}
-							>
-								<View style={styles.shoesCell}>
-									<Image style={styles.shoesImg} source={{ uri: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600' }} />
-									<Text style={styles.shoesName}>
-										Air Jordan
-									</Text>
-								</View>
-							</TouchableOpacity>
-						</View>
+						))
+					}
+				</View>
+				{
+					// Featured
+				}
+				<Text style={styles.headerTxt}>
+					Featured
+				</Text>
+				<View style={{ backgroundColor: '#C2C4CA', height: 1, marginTop: toDips(16), }} />
+			</View>
+		);
+	}
+
+	renderGoodsRow({ item: { arr }, index }) {
+		return (
+			<View style={styles.featuredShoesCellRow}>
+				<View style={[styles.featuredShoesCell, styles.featuredShoesCellLeft]}>
+					<Image style={styles.featuredShoesImg} source={{ uri: arr[0].img }} />
+					<View style={styles.featuredShoesNameContainer}>
+						<Text style={styles.featuredShoesName} numberOfLines={2}>
+							{ arr[0].name }
+						</Text>
+					</View>
+					<View style={styles.featuredShoesInfo}>
+						<Text style={styles.featuredShoesPrice}>
+							from $<Text style={styles.featuredShoesBigPrice}>{ arr[0].price }</Text>
+						</Text>
+						<Text style={styles.featuredShoesNumShop}>
+							{ arr[0].numShops } shops
+						</Text>
 					</View>
 				</View>
+				{
+					arr[1] && (
+						<View style={styles.featuredShoesCell}>
+							<Image style={styles.featuredShoesImg} source={{ uri: arr[1].img }} />
+							<View style={styles.featuredShoesNameContainer}>
+								<Text style={styles.featuredShoesName} numberOfLines={2}>
+									{ arr[1].name }
+								</Text>
+							</View>
+							<View style={styles.featuredShoesInfo}>
+								<Text style={styles.featuredShoesPrice}>
+									from $<Text style={styles.featuredShoesBigPrice}>{ arr[1].price }</Text>
+								</Text>
+								<Text style={styles.featuredShoesNumShop}>
+									{ arr[1].numShops } shops
+								</Text>
+							</View>
+						</View>
+					)
+				}
 			</View>
+		);
+	}
+
+	render() {
+		// const { navigate, goBack } = this.props.navigation;
+		const { featuredShoesArr } = this.state;
+		const featuredShoesArrArr = [];
+		let index = 0;
+		while (featuredShoesArr.length > 0) {
+			featuredShoesArrArr.push({
+				key: `featuredShoes${index++}`,
+				arr: featuredShoesArr.splice(0, 2),
+			});
+		}
+		// const goodsItemHeight = toDips(473);
+		return (
+			<FlatList
+				data={featuredShoesArrArr}
+				// extraData={this.state}
+				// keyExtractor={this._keyExtractor}
+				renderItem={this.renderGoodsRow}
+				ItemSeparatorComponent={() => <View style={{ backgroundColor: '#C2C4CA', height: 1, }} />}
+				// 列表为空时渲染该组件
+				// ListEmptyComponent={() => {}}
+				ListHeaderComponent={() => {
+					return this.renderHeader();
+				}}
+				// getItemLayout={(data, index) => (
+				// 	{ length: goodsItemHeight, offset: goodsItemHeight * index, index }
+				// )}
+			/>
 		);
 	}
 
@@ -174,9 +326,6 @@ export default class MainScene extends PureComponent {
 		});
 	}
 
-	test() {
-		fetchGoodsTypeArr();
-	}
 }
 
 const styles = StyleSheet.create({
@@ -197,28 +346,111 @@ const styles = StyleSheet.create({
 	topStyleContainer: {
 		marginTop: toDips(12),
 	},
-	topStyleTxt: {
-		fontSize: toDips(34),
-		marginLeft: toDips(10),
+	headerTxt: {
+		fontSize: getFontSize(34),
+		marginLeft: toDips(32),
+		marginTop: toDips(16),
 	},
-	shoesContainer: {
-
-	},
-	shoesRowContainer: {
+	topShoesContainer: {
 		flexDirection: 'row',
-		justifyContent: 'space-around',
-		marginTop: toDips(10),
+		flexWrap: 'wrap',
 	},
-	shoesCell: {
+	topShoesCell: {
+		width: toDips(187.5),
+		marginTop: toDips(16),
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
-	shoesImg: {
+	topShoesMore: {
+		width: toDips(96),
+		height: toDips(80),
+		backgroundColor: '#F3F1F4',
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	topShoesMoreText: {
+		fontSize: getFontSize(24),
+		color: '#4A4A4A',
+	},
+	topShoesImg: {
 		width: toDips(120),
 		height: toDips(85),
 	},
-	shoesName: {
-		fontSize: toDips(20),
-		marginTop: toDips(10),
+	topShoesName: {
+		fontSize: getFontSize(20),
+		marginTop: toDips(16),
+	},
+	mostPopularShoesContainer: {
+		flexWrap: 'wrap',
+		flexDirection: 'row',
+	},
+	mostPopularShoesCell: {
+		width: toDips(206),
+		// height: toDips(290),
+		marginLeft: toDips(32),
+	},
+	mostPopularShoesImg: {
+		width: toDips(206),
+		height: toDips(206),
+	},
+	mostPopularShoesName: {
+		color: 'black',
+		fontSize: getFontSize(24),
+		marginTop: toDips(16),
+		alignSelf: 'center',
+	},
+	mostPopularShoesPrice: {
+		fontSize: getFontSize(36),
+		color: 'black',
+		marginTop: toDips(16),
+		alignSelf: 'center',
+	},
+	featuredShoesCellRow: {
+		width: toDips(750),
+		// height: toDips(473),
+		flexDirection: 'row',
+		backgroundColor: 'white',
+	},
+	featuredShoesCell: {
+		flex: 1,
+		alignItems: 'center',
+	},
+	featuredShoesCellLeft: {
+		borderRightWidth: 1,
+		borderColor: '#E1E2E5',
+	},
+	featuredShoesImg: {
+		width: toDips(120),
+		height: toDips(120),
+		marginTop: toDips(32),
+	},
+	featuredShoesNameContainer: {
+		marginTop: toDips(16),
+		height: toDips(99),
+		justifyContent: 'center',
+	},
+	featuredShoesName: {
+		fontSize: getFontSize(32),
+		color: '#514E4E',
+		maxWidth: toDips(308),
+	},
+	featuredShoesInfo: {
+		flexDirection: 'row',
+		alignItems: 'flex-end',
+		justifyContent: 'space-between',
+		marginTop: toDips(16),
+		marginBottom: toDips(32),
+		width: toDips(308),
+	},
+	featuredShoesPrice: {
+		color: '#514E4E',
+		fontSize: getFontSize(24),
+	},
+	featuredShoesBigPrice: {
+		fontSize: getFontSize(32),
+	},
+	featuredShoesNumShop: {
+		color: '#181818',
+		fontSize: getFontSize(28),
 	},
 });

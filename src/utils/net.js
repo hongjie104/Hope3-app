@@ -43,37 +43,35 @@ export function post(url, data, successCallback, errorCallback = null) {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            // 'Accept': "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-            // 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
         },
         body: JSON.stringify(data),
     }), TIME_OUT)
-    .then(response => response.text())
-    .then((responseText) => {
-        successCallback(JSON.parse(responseText));
-    })
-    .catch(e => errorCallback && errorCallback(e));
+        .then(response => response.text())
+        .then((responseText) => {
+            successCallback(JSON.parse(responseText));
+        })
+        .catch(e => errorCallback && errorCallback(e));
 }
 
 /**
  * 发送get请求
  * @param  {[string]}   url             api
- * @param  {[function]} successCallback 成功时的回调
- * @param  {[function]} errorCallback   错误时的回调
  */
-export function get(url, successCallback, errorCallback = null) {
-    if (!isConnected) {
-        // utils.toast('网络链接已断开');
-        if (errorCallback) {
-        errorCallback('net is not Connected');
+export function get(url) {
+    return new Promise((resolve, reject) => {
+        if (!isConnected) {
+            // utils.toast('网络链接已断开');
+            if (errorCallback) {
+                errorCallback('net is not Connected');
+            }
+            return;
         }
-        return;
-    }
-    timeout(fetch(url), TIME_OUT)
-    .then(response => response.text())
-    .then((responseText) => {
-        // on success
-        successCallback(JSON.parse(responseText));
-    })
-    .catch(e => errorCallback && errorCallback(e));
+        timeout(fetch(url), TIME_OUT)
+            .then(response => response.text())
+            .then((responseText) => {
+                // on success
+                resolve(JSON.parse(responseText));
+            })
+            .catch(e => reject(e));
+    });
 }
