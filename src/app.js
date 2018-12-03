@@ -2,19 +2,26 @@
 
 import React, { PureComponent } from 'react';
 import {
-	BackHandler
+	BackHandler,
+	View,
 } from 'react-native';
 
-import AppNavigation from './navigation';
+import createAppNavigation from './navigation';
 import { NavigationActions } from 'react-navigation';
 import toast from './utils/toast';
 import * as deviceInfo from './utils/deviceInfo';
 // import logArr from './store/logArr';
 
+let AppNavigation = null;
+
 export default class App extends PureComponent {
 	
 	constructor(props) {
 		super(props);
+
+		this.state = {
+			checkingLocalData: true,
+		};
 
 		// 上一次按下android返回键的时间
 		this._lastPressBackTime = 0;
@@ -40,6 +47,7 @@ export default class App extends PureComponent {
 	}
 
 	componentDidMount() {
+		AppNavigation = createAppNavigation('');
 		if (!deviceInfo.isIOS()) {
 			const defaultStateAction = AppNavigation.router.getStateForAction;
 			AppNavigation.router.getStateForAction = (action, state) => {
@@ -58,9 +66,15 @@ export default class App extends PureComponent {
 				return defaultStateAction(action, state);
 			};
 		}
+		this.setState({
+			checkingLocalData: false,
+		});
 	}
 
 	render() {
+		if (this.state.checkingLocalData){
+			return <View style={{ flex: 1 }}></View>
+		}
 		return (
 			<AppNavigation ref={c => this._navigation = c} />
 		);

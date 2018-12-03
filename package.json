@@ -13,12 +13,12 @@
     "@remobile/react-native-zip": "^1.0.5",
     "mobx": "^5.5.0",
     "mobx-react": "^5.2.8",
-    "react": "16.5.0",
-    "react-native": "0.57.1",
+    "react": "16.6.0-alpha.8af6728",
+    "react-native": "0.57.3",
     "react-native-device-info": "^0.22.6",
     "react-native-fs": "^2.11.17",
     "react-native-swiper": "^1.5.13",
-    "react-navigation": "^2.17.0"
+    "react-navigation": "^2.18.1"
   },
   "devDependencies": {
     "@babel/core": "^7.1.0",
@@ -27,8 +27,8 @@
     "@babel/plugin-transform-runtime": "^7.1.0",
     "babel-jest": "23.6.0",
     "jest": "23.6.0",
-    "metro-react-native-babel-preset": "0.47.0",
-    "react-test-renderer": "16.5.0"
+    "metro-react-native-babel-preset": "0.48.1",
+    "react-test-renderer": "16.6.0-alpha.8af6728"
   },
   "jest": {
     "preset": "react-native"

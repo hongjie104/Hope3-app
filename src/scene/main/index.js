@@ -11,15 +11,30 @@ import {
 } from 'react-native';
 
 import Swiper from 'react-native-swiper';
+import HeaderTitle from './HeaderTitle';
 import { toDips, getFontSize } from '../../utils/dimensions';
 import { getTopSeries } from '../../service';
 import { IMG_HOST } from '../../config';
 
+let self = null;
+
 export default class MainScene extends PureComponent {
 	
-	static navigationOptions = ({ navigation, screenProps }) => ({
-		title: 'main scene',
-	});
+	static navigationOptions = ({ navigation }) => {
+		return {
+			headerStyle: {
+				backgroundColor: 'black',
+			},
+			headerTitle: <HeaderTitle onHeaderPress={(val) => { self.onHeaderPress(val); }} />,
+			// tabBarIcon: ({ focused, tintColor }) => {
+			// 	const img = focused ? require('../../imgs/syax.png') : require('../../imgs/sy.png');
+			// 	return <Image style={{ width: toDips(50), height: toDips(50), }} source={img} />;
+			// },
+			tabBarLabel: ({ focused }) => {
+				return <Text style={[{ fontSize: getFontSize(26), alignSelf: 'center', }, focused ? { color: '#DD4124' } : { color: '#878787' }]}>任务</Text>;
+			},
+		}
+	};
 
 	constructor(props) {
 		super(props);
@@ -27,37 +42,37 @@ export default class MainScene extends PureComponent {
 			topSeriesArr: [],
 			mostPopularShoesArr: [
 				{
-					img: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
+					img: 'http://hope3.pksen.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
 					name: 'Air Jordan',
 					price: '890',
 					id: 1,
 				},
 				{
-					img: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
+					img: 'http://hope3.pksen.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
 					name: 'Air Jordan',
 					price: '890',
 					id: 2,
 				},
 				{
-					img: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
+					img: 'http://hope3.pksen.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
 					name: 'Air Jordan',
 					price: '890',
 					id: 3,
 				},
 				{
-					img: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
+					img: 'http://hope3.pksen.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
 					name: 'Air Jordan',
 					price: '890',
 					id: 4,
 				},
 				{
-					img: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
+					img: 'http://hope3.pksen.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
 					name: 'Air Jordan',
 					price: '890',
 					id: 5,
 				},
 				{
-					img: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
+					img: 'http://hope3.pksen.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
 					name: 'Air Jordan',
 					price: '890',
 					id: 6,
@@ -65,7 +80,7 @@ export default class MainScene extends PureComponent {
 			],
 			featuredShoesArr: [
 				{
-					img: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
+					img: 'http://hope3.pksen.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
 					name: 'Air Jordan',
 					price: '890',
 					numShops: 20,
@@ -73,7 +88,7 @@ export default class MainScene extends PureComponent {
 					key: '1',
 				},
 				{
-					img: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
+					img: 'http://hope3.pksen.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
 					name: 'Air Jordan',
 					price: '890',
 					numShops: 20,
@@ -81,7 +96,7 @@ export default class MainScene extends PureComponent {
 					key: '2',
 				},
 				{
-					img: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
+					img: 'http://hope3.pksen.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
 					name: 'Air Jordan',
 					price: '890',
 					numShops: 20,
@@ -89,7 +104,7 @@ export default class MainScene extends PureComponent {
 					key: '3',
 				},
 				{
-					img: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
+					img: 'http://hope3.pksen.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
 					name: 'Air Jordan',
 					price: '890',
 					numShops: 20,
@@ -97,7 +112,7 @@ export default class MainScene extends PureComponent {
 					key: '4',
 				},
 				{
-					img: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
+					img: 'http://hope3.pksen.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
 					name: 'Air Jordan',
 					price: '890',
 					numShops: 20,
@@ -105,7 +120,7 @@ export default class MainScene extends PureComponent {
 					key: '5',
 				},
 				{
-					img: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
+					img: 'http://hope3.pksen.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
 					name: 'Air Jordan',
 					price: '890',
 					numShops: 20,
@@ -113,7 +128,7 @@ export default class MainScene extends PureComponent {
 					key: '6',
 				},
 				{
-					img: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
+					img: 'http://hope3.pksen.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
 					name: 'Air Jordan',
 					price: '890',
 					numShops: 20,
@@ -121,7 +136,7 @@ export default class MainScene extends PureComponent {
 					key: '7',
 				},
 				{
-					img: 'http://pa9m48qrj.bkt.clouddn.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
+					img: 'http://hope3.pksen.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
 					name: 'Air Jordan',
 					price: '890',
 					numShops: 20,
@@ -133,15 +148,26 @@ export default class MainScene extends PureComponent {
 	}
 
 	async componentDidMount() {
+		// this.props.navigation.setParams({
+		// 	a: this.onHeaderPress.bind(this),
+		// 	b: '10',
+		// });
+		self = this;
+
 		// 获取置顶的系列
 		const { success, data } = await getTopSeries();
+		console.warn(data);
 		this.setState({
 			topSeriesArr: data,
 		});
 	}
 
+	onHeaderPress(val) {
+		console.warn(val);
+	}
 
-	renderHeader() {
+
+	renderHeader() {		
 		const { topSeriesArr, mostPopularShoesArr } = this.state;
 		return (
 			<View style={styles.container}>
@@ -285,7 +311,6 @@ export default class MainScene extends PureComponent {
 	}
 
 	render() {
-		// const { navigate, goBack } = this.props.navigation;
 		const { featuredShoesArr } = this.state;
 		const featuredShoesArrArr = [];
 		let index = 0;
