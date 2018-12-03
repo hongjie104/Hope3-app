@@ -27,30 +27,28 @@ function timeout(promise, ms) {
  * 发送post请求
  * @param  {[string]}   url             api
  * @param  {[json]}     data            数据
- * @param  {[function]} successCallback 成功的回调
- * @param  {[function]} errorCallback   失败的回调
  */
-export function post(url, data, successCallback, errorCallback = null) {
-    if (!isConnected) {
-        // utils.toast('网络链接已断开');
-        if (errorCallback) {
-            errorCallback('net is not Connected');
+export function post(url, data) {
+    return new Promise((resolve, reject) => {
+        if (!isConnected) {
+            // utils.toast('网络链接已断开');
+            reject('net is not Connected');
+            return;
         }
-        return;
-    }
-    timeout(fetch(url, {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-    }), TIME_OUT)
-        .then(response => response.text())
-        .then((responseText) => {
-            successCallback(JSON.parse(responseText));
-        })
-        .catch(e => errorCallback && errorCallback(e));
+        timeout(fetch(url, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        }), TIME_OUT)
+            .then(response => response.text())
+            .then((responseText) => {
+                resolve(JSON.parse(responseText));
+            })
+            .catch(e => reject(e));
+    });
 }
 
 /**
@@ -61,9 +59,7 @@ export function get(url) {
     return new Promise((resolve, reject) => {
         if (!isConnected) {
             // utils.toast('网络链接已断开');
-            if (errorCallback) {
-                errorCallback('net is not Connected');
-            }
+            reject('net is not Connected');
             return;
         }
         timeout(fetch(url), TIME_OUT)

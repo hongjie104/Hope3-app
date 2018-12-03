@@ -8,8 +8,6 @@ import {
 import AppNavigation from './navigation';
 import { NavigationActions } from 'react-navigation';
 import toast from './utils/toast';
-// import * as jpush from './utils/jpush';
-// import * as wx from './utils/wx';
 import * as deviceInfo from './utils/deviceInfo';
 // import logArr from './store/logArr';
 
