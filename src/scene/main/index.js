@@ -13,7 +13,8 @@ import {
 import Swiper from 'react-native-swiper';
 import HeaderTitle from './HeaderTitle';
 import { toDips, getFontSize } from '../../utils/dimensions';
-import { getTopSeries } from '../../service';
+import toast from '../../utils/toast';
+import { getTopSeries, getTopGoodsColor } from '../../service';
 import { IMG_HOST } from '../../config';
 
 let self = null;
@@ -31,7 +32,7 @@ export default class MainScene extends PureComponent {
 			// 	return <Image style={{ width: toDips(50), height: toDips(50), }} source={img} />;
 			// },
 			tabBarLabel: ({ focused }) => {
-				return <Text style={[{ fontSize: getFontSize(26), alignSelf: 'center', }, focused ? { color: '#DD4124' } : { color: '#878787' }]}>任务</Text>;
+				return <Text style={[{ fontSize: getFontSize(26), alignSelf: 'center', }, focused ? { color: '#DD4124' } : { color: '#878787' }]}>HOME</Text>;
 			},
 		}
 	};
@@ -40,44 +41,7 @@ export default class MainScene extends PureComponent {
 		super(props);
 		this.state = {
 			topSeriesArr: [],
-			mostPopularShoesArr: [
-				{
-					img: 'http://hope3.pksen.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
-					name: 'Air Jordan',
-					price: '890',
-					id: 1,
-				},
-				{
-					img: 'http://hope3.pksen.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
-					name: 'Air Jordan',
-					price: '890',
-					id: 2,
-				},
-				{
-					img: 'http://hope3.pksen.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
-					name: 'Air Jordan',
-					price: '890',
-					id: 3,
-				},
-				{
-					img: 'http://hope3.pksen.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
-					name: 'Air Jordan',
-					price: '890',
-					id: 4,
-				},
-				{
-					img: 'http://hope3.pksen.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
-					name: 'Air Jordan',
-					price: '890',
-					id: 5,
-				},
-				{
-					img: 'http://hope3.pksen.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
-					name: 'Air Jordan',
-					price: '890',
-					id: 6,
-				},
-			],
+			topGoodsColor: [],
 			featuredShoesArr: [
 				{
 					img: 'http://hope3.pksen.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
@@ -155,10 +119,23 @@ export default class MainScene extends PureComponent {
 		self = this;
 
 		// 获取置顶的系列
-		const { success, data } = await getTopSeries();
-		console.warn(data);
+		let topSeriesArr = null;
+		try {
+			topSeriesArr = await getTopSeries(7);
+		} catch(e) {
+			toast(e);
+			return;
+		}
+		let topGoodsColorData = null;
+		try {
+			topGoodsColorData = await getTopGoodsColor(16);
+		} catch(e) {
+			toast(e);
+			return;
+		}
 		this.setState({
-			topSeriesArr: data,
+			topSeriesArr,
+			topGoodsColor: topGoodsColorData.goodsColorArr,
 		});
 	}
 
@@ -168,7 +145,7 @@ export default class MainScene extends PureComponent {
 
 
 	renderHeader() {		
-		const { topSeriesArr, mostPopularShoesArr } = this.state;
+		const { topSeriesArr, topGoodsColor } = this.state;
 		return (
 			<View style={styles.container}>
 				{
@@ -204,7 +181,7 @@ export default class MainScene extends PureComponent {
 						topSeriesArr.map((goods, i) => (
 							<TouchableOpacity
 								activeOpacity={0.8}
-								onPress={() => { this.onShoesPressed(goods._id); }}
+								onPress={() => {}}
 								style={styles.topShoesCell}
 								key={`item${i}`}
 							>
@@ -236,21 +213,21 @@ export default class MainScene extends PureComponent {
 				<Text style={styles.headerTxt}>
 					Most Popular
 				</Text>
-				<View style={styles.mostPopularShoesContainer}>
+				<View style={styles.topGoodsColorContainer}>
 					{
-						mostPopularShoesArr.map((goods, i) => (
+						topGoodsColor.map((goodsColor, i) => (
 							<TouchableOpacity
 								activeOpacity={0.8}
 								onPress={() => {}}
-								style={styles.mostPopularShoesCell}
+								style={styles.topGoodsColorCell}
 								key={`item1 ${i}`}
 							>
-								<Image style={styles.mostPopularShoesImg} source={{ uri: goods.img }} />
-								<Text style={styles.mostPopularShoesName} numberOfLines={2}>
-									{ goods.name }
+								<Image style={styles.topGoodsColorImg} source={{ uri: `${IMG_HOST}/${goodsColor.img}` }} />
+								<Text style={styles.topGoodsColorName} numberOfLines={2}>
+									{ goodsColor.name }
 								</Text>
-								<Text style={styles.mostPopularShoesPrice}>
-									${ goods.price }
+								<Text style={styles.topGoodsColorPrice}>
+									${ goodsColor.price }
 								</Text>
 							</TouchableOpacity>
 						))
@@ -340,14 +317,14 @@ export default class MainScene extends PureComponent {
 		);
 	}
 
-	onShoesPressed() {
+	onGoodsColorPressed(goodsColorId) {
 		const { navigate } = this.props.navigation;
-		// navigate('shoesDetail', {
-		// 	mode: 'modal',
-		// });
 		navigate({
-			routeName: 'shoesDetail',
-			// params: { mode: 'modal' },
+			routeName: 'GoodsTypeScene',
+			params: {
+				// mode: 'modal',
+				goodsColorId,
+			},
 		});
 	}
 
@@ -398,33 +375,33 @@ const styles = StyleSheet.create({
 		color: '#4A4A4A',
 	},
 	topShoesImg: {
-		width: toDips(120),
-		height: toDips(85),
+		width: toDips(96),
+		height: toDips(96),
 	},
 	topShoesName: {
 		fontSize: getFontSize(20),
 		marginTop: toDips(16),
 	},
-	mostPopularShoesContainer: {
+	topGoodsColorContainer: {
 		flexWrap: 'wrap',
 		flexDirection: 'row',
 	},
-	mostPopularShoesCell: {
+	topGoodsColorCell: {
 		width: toDips(206),
 		// height: toDips(290),
 		marginLeft: toDips(32),
 	},
-	mostPopularShoesImg: {
+	topGoodsColorImg: {
 		width: toDips(206),
 		height: toDips(206),
 	},
-	mostPopularShoesName: {
+	topGoodsColorName: {
 		color: 'black',
 		fontSize: getFontSize(24),
 		marginTop: toDips(16),
 		alignSelf: 'center',
 	},
-	mostPopularShoesPrice: {
+	topGoodsColorPrice: {
 		fontSize: getFontSize(36),
 		color: 'black',
 		marginTop: toDips(16),

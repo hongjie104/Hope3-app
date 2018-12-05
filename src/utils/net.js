@@ -45,7 +45,12 @@ export function post(url, data) {
         }), TIME_OUT)
             .then(response => response.text())
             .then((responseText) => {
-                resolve(JSON.parse(responseText));
+                const jsonData = JSON.parse(responseText);
+                if (jsonData.success) {
+                    resolve(jsonData.data);
+                } else {
+                    reject(jsonData.data);
+                }
             })
             .catch(e => reject(e));
     });
@@ -66,7 +71,12 @@ export function get(url) {
             .then(response => response.text())
             .then((responseText) => {
                 // on success
-                resolve(JSON.parse(responseText));
+                const jsonData = JSON.parse(responseText);
+                if (jsonData.success) {
+                    resolve(jsonData.data);
+                } else {
+                    reject(jsonData.data);
+                }
             })
             .catch(e => reject(e));
     });

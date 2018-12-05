@@ -10,7 +10,9 @@ import {
 	FlatList,
 	TouchableOpacity,
 } from 'react-native';
+import { showGoodsType } from '../../service';
 import { toDips, getFontSize } from '../../utils/dimensions';
+import toast from '../../utils/toast';
 
 export default class DetailScene extends PureComponent {
 	
@@ -21,6 +23,7 @@ export default class DetailScene extends PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {
+			goods: null,
 			goodsArr: [
 				{
 					img: 'http://pa9m48qrj.bkt.clouddn.com/eastbay/55088031.jpg',
@@ -60,6 +63,21 @@ export default class DetailScene extends PureComponent {
 				},
 			],
 		};
+	}
+
+	async componentDidMount() {
+		const { goodsTypeId } = this.props.navigation.state.params;
+		let data = null;
+		try {
+			data = await showGoodsType(goodsTypeId);
+		} catch(e) {
+			toast(e);
+			return;
+		}
+		console.warn(data);
+		this.setState({
+			goods: data,
+		});
 	}
 
 	navigateToSizeSelector() {

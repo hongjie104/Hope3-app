@@ -9,8 +9,8 @@ import TestScene3 from '../scene/test/TestScene3';
 
 import LogScene from '../scene/log';
 import MainScene from '../scene/main';
-import ShoesDetailScene from '../scene/shoes';
-import ShoesSizeSelector from '../scene/shoes/SizeSelector';
+import GoodsTypeScene from '../scene/goodsType';
+import ShoesSizeSelector from '../scene/goodsType/SizeSelector';
 
 import StackViewStyleInterpolator from "react-navigation-stack/dist/views/StackView/StackViewStyleInterpolator";
 
@@ -18,6 +18,7 @@ YellowBox.ignoreWarnings([
 	'Module CDVFileTransfer',
 	'Module ZipPlugin',
 	'Class CDVPlugin',
+	'RCTBridge required'
 ]);
 
 const TabNavigation = createBottomTabNavigator({
@@ -40,7 +41,7 @@ TabNavigation.navigationOptions = ({ navigation }) => {
 export default function createAppNavigation(isLogedIn) {
 	return createStackNavigator({
 		main: TabNavigation,
-		shoesDetail: ShoesDetailScene,
+		GoodsTypeScene,
 		shoesSizeSelector: ShoesSizeSelector,
 		test1: TestScene1,
 		test2: TestScene2,

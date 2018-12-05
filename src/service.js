@@ -8,6 +8,15 @@ import { get, post } from './utils/net';
 // 	});
 // }
 
-export function getTopSeries() {
-	return get(`${SERVER_HOST}/api/app/top_series`);
+export function getTopSeries(count) {
+	return get(`${SERVER_HOST}/api/app/series/top/${count}`);
+}
+
+
+export function showGoodsType(id) {
+	return get(`${SERVER_HOST}/api/app/goods/${id}`);
+}
+
+export function getTopGoodsColor(count) {
+	return get(`${SERVER_HOST}/api/app/goodsColor/top/${count}`);
 }
