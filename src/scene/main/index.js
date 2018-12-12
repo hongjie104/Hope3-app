@@ -12,9 +12,11 @@ import {
 
 import Swiper from 'react-native-swiper';
 import HeaderTitle from './HeaderTitle';
+import TopStyle from './TopStyle';
+import PopularGoodsColor from './PopularGoodsColor';
 import { toDips, getFontSize } from '../../utils/dimensions';
 import toast from '../../utils/toast';
-import { getTopSeries, getTopGoodsColor } from '../../service';
+import { getHomeData } from '../../service';
 import { IMG_HOST } from '../../config';
 
 let self = null;
@@ -117,25 +119,22 @@ export default class MainScene extends PureComponent {
 		// 	b: '10',
 		// });
 		self = this;
-
-		// 获取置顶的系列
-		let topSeriesArr = null;
+		let data = null;
 		try {
-			topSeriesArr = await getTopSeries(7);
-		} catch(e) {
+			data = await getHomeData(7, 16, 16);
+		} catch (e) {
 			toast(e);
 			return;
 		}
-		let topGoodsColorData = null;
-		try {
-			topGoodsColorData = await getTopGoodsColor(16);
-		} catch(e) {
-			toast(e);
-			return;
-		}
+		const {
+			popularGoodsColorArr,
+			recommendGoodsColorArr,
+			topSeries,
+		} = data;
 		this.setState({
-			topSeriesArr,
-			topGoodsColor: topGoodsColorData.goodsColorArr,
+			topSeriesArr: topSeries,
+			topGoodsColor: popularGoodsColorArr,
+			recommendGoodsColorArr,
 		});
 	}
 
@@ -173,66 +172,11 @@ export default class MainScene extends PureComponent {
 				{
 					// top styles
 				}
-				<Text style={styles.headerTxt}>
-					Top Styles
-				</Text>
-				<View style={styles.topShoesContainer}>
-					{
-						topSeriesArr.map((goods, i) => (
-							<TouchableOpacity
-								activeOpacity={0.8}
-								onPress={() => {}}
-								style={styles.topShoesCell}
-								key={`item${i}`}
-							>
-								<Image style={styles.topShoesImg} source={{ uri: `${IMG_HOST}/${goods.img}` }} />
-								<Text style={styles.topShoesName}>
-									{ goods.name }
-								</Text>
-							</TouchableOpacity>
-						))
-					}
-					{
-						// more
-					}
-					<TouchableOpacity
-						activeOpacity={0.8}
-						onPress={() => { }}
-						style={styles.topShoesCell}
-					>
-						<View style={styles.topShoesMore}>
-							<Text style={styles.topShoesMoreText}>
-								MORE
-							</Text>
-						</View>	
-					</TouchableOpacity>
-				</View>
+				<TopStyle topSeriesArr={topSeriesArr} />
 				{
 					// Most Popular
 				}
-				<Text style={styles.headerTxt}>
-					Most Popular
-				</Text>
-				<View style={styles.topGoodsColorContainer}>
-					{
-						topGoodsColor.map((goodsColor, i) => (
-							<TouchableOpacity
-								activeOpacity={0.8}
-								onPress={() => {}}
-								style={styles.topGoodsColorCell}
-								key={`item1 ${i}`}
-							>
-								<Image style={styles.topGoodsColorImg} source={{ uri: `${IMG_HOST}/${goodsColor.img}` }} />
-								<Text style={styles.topGoodsColorName} numberOfLines={2}>
-									{ goodsColor.name }
-								</Text>
-								<Text style={styles.topGoodsColorPrice}>
-									${ goodsColor.price }
-								</Text>
-							</TouchableOpacity>
-						))
-					}
-				</View>
+				<PopularGoodsColor topGoodsColor={topGoodsColor} />
 				{
 					// Featured
 				}
@@ -333,7 +277,7 @@ export default class MainScene extends PureComponent {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: 'white',
+		backgroundColor: '#EFEFEF',
 	},
 	swiperContainer: {
 		height: toDips(248),
@@ -344,68 +288,6 @@ const styles = StyleSheet.create({
 	},
 	swiperDot: {
 		marginBottom: -30,
-	},
-	topStyleContainer: {
-		marginTop: toDips(12),
-	},
-	headerTxt: {
-		fontSize: getFontSize(34),
-		marginLeft: toDips(32),
-		marginTop: toDips(16),
-	},
-	topShoesContainer: {
-		flexDirection: 'row',
-		flexWrap: 'wrap',
-	},
-	topShoesCell: {
-		width: toDips(187.5),
-		marginTop: toDips(16),
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	topShoesMore: {
-		width: toDips(96),
-		height: toDips(80),
-		backgroundColor: '#F3F1F4',
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-	topShoesMoreText: {
-		fontSize: getFontSize(24),
-		color: '#4A4A4A',
-	},
-	topShoesImg: {
-		width: toDips(96),
-		height: toDips(96),
-	},
-	topShoesName: {
-		fontSize: getFontSize(20),
-		marginTop: toDips(16),
-	},
-	topGoodsColorContainer: {
-		flexWrap: 'wrap',
-		flexDirection: 'row',
-	},
-	topGoodsColorCell: {
-		width: toDips(206),
-		// height: toDips(290),
-		marginLeft: toDips(32),
-	},
-	topGoodsColorImg: {
-		width: toDips(206),
-		height: toDips(206),
-	},
-	topGoodsColorName: {
-		color: 'black',
-		fontSize: getFontSize(24),
-		marginTop: toDips(16),
-		alignSelf: 'center',
-	},
-	topGoodsColorPrice: {
-		fontSize: getFontSize(36),
-		color: 'black',
-		marginTop: toDips(16),
-		alignSelf: 'center',
 	},
 	featuredShoesCellRow: {
 		width: toDips(750),
