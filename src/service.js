@@ -12,6 +12,14 @@ export function getHomeData(seriesCount, popularGoodsColorCount, recommendGoodsC
 	return get(`${SERVER_HOST}/api/app/home/${seriesCount}/${popularGoodsColorCount}/${recommendGoodsColorCount}`);
 }
 
+export function getRecommendGoodsColor(page, pageSize) {
+	return get(`${SERVER_HOST}/api/app/goodsColor/recommend/${page}/${pageSize}`);
+}
+
+export function getGoodsType(goodsTypeId, goodsColorId) {
+	return get(`${SERVER_HOST}/api/app/goodsType/${goodsTypeId}?goodsColorId=${goodsColorId}`);
+}
+
 // export function getTopSeries(count) {
 // 	return get(`${SERVER_HOST}/api/app/series/top/${count}`);
 // }

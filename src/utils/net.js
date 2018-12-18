@@ -45,7 +45,13 @@ export function post(url, data) {
         }), TIME_OUT)
             .then(response => response.text())
             .then((responseText) => {
-                const jsonData = JSON.parse(responseText);
+                let jsonData = null;
+                try {
+                    jsonData = JSON.parse(responseText);
+                } catch (e) {
+                    reject('服务器出错了');
+                    return;
+                }
                 if (jsonData.success) {
                     resolve(jsonData.data);
                 } else {
@@ -71,13 +77,21 @@ export function get(url) {
             .then(response => response.text())
             .then((responseText) => {
                 // on success
-                const jsonData = JSON.parse(responseText);
+                let jsonData = null;
+                try {
+                    jsonData = JSON.parse(responseText);
+                } catch (e) {
+                    reject('服务器出错了');
+                    return;
+                }
                 if (jsonData.success) {
                     resolve(jsonData.data);
                 } else {
                     reject(jsonData.data);
                 }
             })
-            .catch(e => reject(e));
+            .catch(e => {
+                reject(e);
+            });
     });
 }

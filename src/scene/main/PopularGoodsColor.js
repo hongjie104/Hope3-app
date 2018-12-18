@@ -37,7 +37,9 @@ export default class PopularGoodsColor extends PureComponent {
 						goodsColorArr.map((goodsColor, i) => (
 							<TouchableOpacity
 								activeOpacity={0.8}
-								onPress={() => {}}
+								onPress={() => {
+									this.props.onGoodsColorPressed(goodsColor._id, goodsColor.goods_type_id);
+								}}
 								style={styles.topGoodsColorCell}
 								key={`item0${i}`}
 							>

@@ -10,9 +10,10 @@ import {
 	FlatList,
 	TouchableOpacity,
 } from 'react-native';
-import { showGoodsType } from '../../service';
+import { getGoodsType } from '../../service';
 import { toDips, getFontSize } from '../../utils/dimensions';
 import toast from '../../utils/toast';
+import { IMG_HOST } from '../../config';
 
 export default class DetailScene extends PureComponent {
 	
@@ -23,7 +24,8 @@ export default class DetailScene extends PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {
-			goods: null,
+			goodsType: null,
+			goodsColorArr: [],
 			goodsArr: [
 				{
 					img: 'http://pa9m48qrj.bkt.clouddn.com/eastbay/55088031.jpg',
@@ -66,17 +68,23 @@ export default class DetailScene extends PureComponent {
 	}
 
 	async componentDidMount() {
-		const { goodsTypeId } = this.props.navigation.state.params;
+		const { goodsColorId, goodsTypeId } = this.props.navigation.state.params;
 		let data = null;
 		try {
-			data = await showGoodsType(goodsTypeId);
+			data = await getGoodsType(goodsTypeId, goodsColorId);
 		} catch(e) {
 			toast(e);
 			return;
 		}
-		console.warn(data);
+		const {
+			goodsType,
+			goodsColorArr,
+			goodsArr,
+		} = data;
 		this.setState({
-			goods: data,
+			goodsType,
+			goodsColorArr,
+			goodsArr,
 		});
 	}
 
@@ -89,14 +97,17 @@ export default class DetailScene extends PureComponent {
 	}
 
 	renderHeader() {
+		const { goodsColorArr } = this.state;
+		const goodsColor = goodsColorArr[0];
+		if (!goodsColor) { return null; }
 		return (
 			<View style={styles.container}>
-				<Image style={styles.mainImg} source={{ uri: 'http://pa9m48qrj.bkt.clouddn.com/eastbay/55088031.jpg' }} />
+				<Image style={styles.mainImg} source={{ uri: `${IMG_HOST}/${goodsColor.img}` }} />
 				<Text style={styles.mainName}>
-					鞋子名称
+					{ goodsColor.name }
 				</Text>
 				<Text style={styles.mainColor}>
-					鞋子颜色
+					{ goodsColor.color_name }
 				</Text>
 				{
 					// 配色列表
@@ -104,13 +115,13 @@ export default class DetailScene extends PureComponent {
 				<View style={styles.goodsColorScrollContainer}>
 					<ScrollView style={styles.goodsColorScrollView} horizontal showsHorizontalScrollIndicator={false}>
 						{
-							[1,2,3,4,5,6,7,8,9,0].map((item, index) => {
+							goodsColorArr.map((item, index) => {
 								return (
 									<View style={styles.goodsColorContainer} key={`item${index}`}>
-										<Image style={styles.goodsColorImg} source={{ uri: 'http://pa9m48qrj.bkt.clouddn.com/eastbay/55088031.jpg' }} />
+										<Image style={styles.goodsColorImg} source={{ uri: `${IMG_HOST}/${item.img}` }} />
 										<View style={[styles.goodsColorNameContainer, styles.goodsColorNameContainerSelected]}>
 											<Text style={[styles.goodsColorName, styles.goodsColorNameSelected]}>
-												款型名称
+												{ item.color_name }
 											</Text>
 										</View>
 									</View>

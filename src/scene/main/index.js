@@ -16,7 +16,7 @@ import TopStyle from './TopStyle';
 import PopularGoodsColor from './PopularGoodsColor';
 import { toDips, getFontSize } from '../../utils/dimensions';
 import toast from '../../utils/toast';
-import { getHomeData } from '../../service';
+import { getHomeData, getRecommendGoodsColor } from '../../service';
 import { IMG_HOST } from '../../config';
 
 let self = null;
@@ -44,72 +44,18 @@ export default class MainScene extends PureComponent {
 		this.state = {
 			topSeriesArr: [],
 			topGoodsColor: [],
-			featuredShoesArr: [
-				{
-					img: 'http://hope3.pksen.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
-					name: 'Air Jordan',
-					price: '890',
-					numShops: 20,
-					id: 1,
-					key: '1',
-				},
-				{
-					img: 'http://hope3.pksen.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
-					name: 'Air Jordan',
-					price: '890',
-					numShops: 20,
-					id: 2,
-					key: '2',
-				},
-				{
-					img: 'http://hope3.pksen.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
-					name: 'Air Jordan',
-					price: '890',
-					numShops: 20,
-					id: 3,
-					key: '3',
-				},
-				{
-					img: 'http://hope3.pksen.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
-					name: 'Air Jordan',
-					price: '890',
-					numShops: 20,
-					id: 4,
-					key: '4',
-				},
-				{
-					img: 'http://hope3.pksen.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
-					name: 'Air Jordan',
-					price: '890',
-					numShops: 20,
-					id: 5,
-					key: '5',
-				},
-				{
-					img: 'http://hope3.pksen.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
-					name: 'Air Jordan',
-					price: '890',
-					numShops: 20,
-					id: 6,
-					key: '6',
-				},
-				{
-					img: 'http://hope3.pksen.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
-					name: 'Air Jordan',
-					price: '890',
-					numShops: 20,
-					id: 7,
-					key: '7',
-				},
-				{
-					img: 'http://hope3.pksen.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
-					name: 'Air Jordan',
-					price: '890',
-					numShops: 20,
-					id: 8,
-					key: '8',
-				},
-			],
+			recommendGoodsColorArr: [],
+			refreshing: false,
+			// featuredShoesArr: [
+			// 	{
+			// 		img: 'http://hope3.pksen.com/flightclub/378037%20623.jpg?imageView2/2/h/600',
+			// 		name: 'Air Jordan',
+			// 		price: '890',
+			// 		numShop: 20,
+			// 		id: 1,
+			// 		key: '1',
+			// 	},
+			// ],
 		};
 	}
 
@@ -119,9 +65,11 @@ export default class MainScene extends PureComponent {
 		// 	b: '10',
 		// });
 		self = this;
+		this.recommendGoodsColorPageSize = 16;
+		this.recommendGoodsColorPage = 1
 		let data = null;
-		try {
-			data = await getHomeData(7, 16, 16);
+		try {			
+			data = await getHomeData(7, 16, this.recommendGoodsColorPageSize);
 		} catch (e) {
 			toast(e);
 			return;
@@ -131,17 +79,79 @@ export default class MainScene extends PureComponent {
 			recommendGoodsColorArr,
 			topSeries,
 		} = data;
+		const newRecommendGoodsColorArr = [];
+		let index = 0;
+		// 分成二维数组，每个元素都是长度为2的数组
+		while (recommendGoodsColorArr.length > 0) {
+			newRecommendGoodsColorArr.push({
+				key: `featuredShoes${index++}`,
+				arr: recommendGoodsColorArr.splice(0, 2),
+			});
+		}
 		this.setState({
 			topSeriesArr: topSeries,
 			topGoodsColor: popularGoodsColorArr,
-			recommendGoodsColorArr,
+			recommendGoodsColorArr: newRecommendGoodsColorArr,
 		});
 	}
 
-	onHeaderPress(val) {
-		console.warn(val);
+	async fetchRecommendGoodsColor() {
+		let result = null;
+		try {
+			result = await getRecommendGoodsColor(this.recommendGoodsColorPage + 1, this.recommendGoodsColorPageSize);
+		} catch (e) {
+			toast(e);
+		}
+		if (result && result.goodsColorArr && result.goodsColorArr.length > 0) {
+			this.recommendGoodsColorPage += 1;
+			const newRecommendGoodsColorArr = [];
+			let index = this.state.recommendGoodsColorArr.length;
+			// 分成二维数组，每个元素都是长度为2的数组
+			while (result.goodsColorArr.length > 0) {
+				newRecommendGoodsColorArr.push({
+					key: `featuredShoes${index++}`,
+					arr: result.goodsColorArr.splice(0, 2),
+				});
+			}
+			this.setState({
+				recommendGoodsColorArr: [...this.state.recommendGoodsColorArr, ...newRecommendGoodsColorArr],
+				refreshing: false,
+			});
+		} else {
+			this.setState({
+				refreshing: false,
+			});
+		}
 	}
 
+	onHeaderPress(val) {
+		
+	}
+
+	async onLoadMore() {
+		await this.fetchRecommendGoodsColor();
+	}
+
+	async onRefresh() {
+		this.recommendGoodsColorPage = 0;
+		this.setState({
+			refreshing: true,
+			recommendGoodsColorArr: [],
+		});
+		await this.fetchRecommendGoodsColor();
+	}
+
+	onGoodsColorPressed(goodsColorId, goodsTypeId) {
+		const { navigate } = this.props.navigation;
+		navigate({
+			routeName: 'GoodsTypeScene',
+			params: {
+				// mode: 'modal',
+				goodsTypeId,
+				goodsColorId,
+			},
+		});
+	}
 
 	renderHeader() {		
 		const { topSeriesArr, topGoodsColor } = this.state;
@@ -176,100 +186,92 @@ export default class MainScene extends PureComponent {
 				{
 					// Most Popular
 				}
-				<PopularGoodsColor topGoodsColor={topGoodsColor} />
+				<PopularGoodsColor
+					topGoodsColor={topGoodsColor}
+					onGoodsColorPressed={(goodsColorId, goodsTypeId) => {
+						this.onGoodsColorPressed(goodsColorId, goodsTypeId);
+					}}
+				/>
 				{
 					// Featured
 				}
-				<Text style={styles.headerTxt}>
-					Featured
-				</Text>
-				<View style={{ backgroundColor: '#C2C4CA', height: 1, marginTop: toDips(16), }} />
+				<View style={styles.recommendationContainer}>
+					<Text style={styles.headerTxt}>
+						Recommendations
+					</Text>
+				</View>
 			</View>
 		);
+	}
+
+	renderGoods(item, isLeft = false) {
+		if (item) {
+			return (
+				<TouchableOpacity
+					activeOpacity={0.8}
+					onPress={() => {
+						this.onGoodsColorPressed(item._id, item.goods_type_id);
+					}}
+					style={[styles.featuredShoesCell, isLeft ? styles.featuredShoesCellLeft : null]}
+				>
+					<Image style={styles.featuredShoesImg} source={{ uri: `${IMG_HOST}/${item.img}` }} />
+					<View style={styles.featuredShoesNameContainer}>
+						<Text style={styles.featuredShoesName} numberOfLines={2}>
+							{ item.name }
+						</Text>
+					</View>
+					<View style={styles.featuredShoesInfo}>
+						<Text style={styles.featuredShoesPrice}>
+							from $<Text style={styles.featuredShoesBigPrice}>{ item.price }</Text>
+						</Text>
+						<Text style={styles.featuredShoesNumShop}>
+							{ item.numShop } shops
+						</Text>
+					</View>
+				</TouchableOpacity>
+			);
+		}
 	}
 
 	renderGoodsRow({ item: { arr }, index }) {
 		return (
 			<View style={styles.featuredShoesCellRow}>
-				<View style={[styles.featuredShoesCell, styles.featuredShoesCellLeft]}>
-					<Image style={styles.featuredShoesImg} source={{ uri: arr[0].img }} />
-					<View style={styles.featuredShoesNameContainer}>
-						<Text style={styles.featuredShoesName} numberOfLines={2}>
-							{ arr[0].name }
-						</Text>
-					</View>
-					<View style={styles.featuredShoesInfo}>
-						<Text style={styles.featuredShoesPrice}>
-							from $<Text style={styles.featuredShoesBigPrice}>{ arr[0].price }</Text>
-						</Text>
-						<Text style={styles.featuredShoesNumShop}>
-							{ arr[0].numShops } shops
-						</Text>
-					</View>
-				</View>
 				{
-					arr[1] && (
-						<View style={styles.featuredShoesCell}>
-							<Image style={styles.featuredShoesImg} source={{ uri: arr[1].img }} />
-							<View style={styles.featuredShoesNameContainer}>
-								<Text style={styles.featuredShoesName} numberOfLines={2}>
-									{ arr[1].name }
-								</Text>
-							</View>
-							<View style={styles.featuredShoesInfo}>
-								<Text style={styles.featuredShoesPrice}>
-									from $<Text style={styles.featuredShoesBigPrice}>{ arr[1].price }</Text>
-								</Text>
-								<Text style={styles.featuredShoesNumShop}>
-									{ arr[1].numShops } shops
-								</Text>
-							</View>
-						</View>
-					)
+					this.renderGoods(arr[0], true)
+				}
+				{
+					this.renderGoods(arr[1])
 				}
 			</View>
 		);
 	}
 
 	render() {
-		const { featuredShoesArr } = this.state;
-		const featuredShoesArrArr = [];
-		let index = 0;
-		while (featuredShoesArr.length > 0) {
-			featuredShoesArrArr.push({
-				key: `featuredShoes${index++}`,
-				arr: featuredShoesArr.splice(0, 2),
-			});
-		}
+		const { recommendGoodsColorArr, refreshing } = this.state;
 		// const goodsItemHeight = toDips(473);
 		return (
 			<FlatList
-				data={featuredShoesArrArr}
+				data={recommendGoodsColorArr}
 				// extraData={this.state}
 				// keyExtractor={this._keyExtractor}
-				renderItem={this.renderGoodsRow}
+				renderItem={itemData => this.renderGoodsRow(itemData)}
 				ItemSeparatorComponent={() => <View style={{ backgroundColor: '#C2C4CA', height: 1, }} />}
 				// 列表为空时渲染该组件
 				// ListEmptyComponent={() => {}}
-				ListHeaderComponent={() => {
-					return this.renderHeader();
-				}}
+				ListHeaderComponent={() => this.renderHeader()}
 				// getItemLayout={(data, index) => (
 				// 	{ length: goodsItemHeight, offset: goodsItemHeight * index, index }
 				// )}
+				onEndReached={async info => {
+					await this.onLoadMore(info);
+				}}
+				onEndReachedThreshold={0.3}
+				onRefresh={async () => {
+					await this.onRefresh();
+				}}
+				refreshing={refreshing}
 			/>
 		);
-	}
-
-	onGoodsColorPressed(goodsColorId) {
-		const { navigate } = this.props.navigation;
-		navigate({
-			routeName: 'GoodsTypeScene',
-			params: {
-				// mode: 'modal',
-				goodsColorId,
-			},
-		});
 	}
 
 }
@@ -288,6 +290,16 @@ const styles = StyleSheet.create({
 	},
 	swiperDot: {
 		marginBottom: -30,
+	},
+	recommendationContainer: {
+		marginTop: toDips(16),
+		backgroundColor: 'white',
+	},
+	headerTxt: {
+		fontSize: getFontSize(34),
+		marginLeft: toDips(32),
+		marginTop: toDips(16),
+		marginBottom: toDips(16),
 	},
 	featuredShoesCellRow: {
 		width: toDips(750),
