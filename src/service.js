@@ -20,6 +20,10 @@ export function getGoodsType(goodsTypeId, goodsColorId) {
 	return get(`${SERVER_HOST}/api/app/goodsType/${goodsTypeId}?goodsColorId=${goodsColorId}`);
 }
 
+export function getGoodsColor(goodsColorId) {
+	return get(`${SERVER_HOST}/api/app/goodsColor/${goodsColorId}`);
+}
+
 // export function getTopSeries(count) {
 // 	return get(`${SERVER_HOST}/api/app/series/top/${count}`);
 // }

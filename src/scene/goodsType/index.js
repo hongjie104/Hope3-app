@@ -6,11 +6,11 @@ import {
 	View,
 	Text,
 	Image,
-	ScrollView,
 	FlatList,
 	TouchableOpacity,
 } from 'react-native';
-import { getGoodsType } from '../../service';
+import GoodsColorScrollView from './GoodsColorScrollView';
+import { getGoodsType, getGoodsColor } from '../../service';
 import { toDips, getFontSize } from '../../utils/dimensions';
 import toast from '../../utils/toast';
 import { IMG_HOST } from '../../config';
@@ -26,44 +26,8 @@ export default class DetailScene extends PureComponent {
 		this.state = {
 			goodsType: null,
 			goodsColorArr: [],
-			goodsArr: [
-				{
-					img: 'http://pa9m48qrj.bkt.clouddn.com/eastbay/55088031.jpg',
-					size: '40,41,42,43,44',
-					platform: 'Finishline',
-					key: '1',
-				},
-				{
-					img: 'http://pa9m48qrj.bkt.clouddn.com/eastbay/55088031.jpg',
-					size: '40,41,42,43,44',
-					platform: 'Finishline',
-					key: '2',
-				},
-				{
-					img: 'http://pa9m48qrj.bkt.clouddn.com/eastbay/55088031.jpg',
-					size: '40,41,42,43,44',
-					platform: 'Finishline',
-					key: '3',
-				},
-				{
-					img: 'http://pa9m48qrj.bkt.clouddn.com/eastbay/55088031.jpg',
-					size: '40,41,42,43,44',
-					platform: 'Finishline',
-					key: '4',
-				},
-				{
-					img: 'http://pa9m48qrj.bkt.clouddn.com/eastbay/55088031.jpg',
-					size: '40,41,42,43,44',
-					platform: 'Finishline',
-					key: '5',
-				},
-				{
-					img: 'http://pa9m48qrj.bkt.clouddn.com/eastbay/55088031.jpg',
-					size: '40,41,42,43,44',
-					platform: 'Finishline',
-					key: '6',
-				},
-			],
+			goodsArr: [],
+			targetGoodsColorId: null,
 		};
 	}
 
@@ -81,10 +45,13 @@ export default class DetailScene extends PureComponent {
 			goodsColorArr,
 			goodsArr,
 		} = data;
+
+		
 		this.setState({
 			goodsType,
 			goodsColorArr,
-			goodsArr,
+			goodsArr: this.overrideGoodsArr(goodsArr),
+			targetGoodsColorId: goodsColorId,
 		});
 	}
 
@@ -96,9 +63,44 @@ export default class DetailScene extends PureComponent {
 		});
 	}
 
+	overrideGoodsArr(goodsArr) {
+		// const sizeSortFunc = (a, b) => a - b;
+		const sizeMapFunc = s => s.size;
+		const goodsMapFunc = g => {
+			const sku = g.sku.filter(s => s.isInStock);
+			return {
+				img: g.img,
+				size: sku.map(sizeMapFunc),
+				lowerPrice: sku.sort((a, b) => a.price - b.price)[0].price,
+				key: g._id,
+			};
+		};
+		return goodsArr.map(goodsMapFunc);
+	}
+
+	async onFetchGoodsColor(goodsColorId) {
+		let data = null;
+		try {
+			data = await getGoodsColor(goodsColorId);
+		} catch (e) {
+			toast(e);
+			return;
+		}
+		this.setState({
+			targetGoodsColorId: goodsColorId,
+			goodsArr: this.overrideGoodsArr(data.goodsArr),
+		});
+	}
+
 	renderHeader() {
-		const { goodsColorArr } = this.state;
-		const goodsColor = goodsColorArr[0];
+		const { goodsColorArr, targetGoodsColorId } = this.state;
+		let goodsColor = goodsColorArr[0];
+		for (let i = 0; i < goodsColorArr.length; i++) {
+			if (goodsColorArr[i]._id === targetGoodsColorId) {
+				goodsColor = goodsColorArr[i];
+				break;
+			}
+		}
 		if (!goodsColor) { return null; }
 		return (
 			<View style={styles.container}>
@@ -112,24 +114,13 @@ export default class DetailScene extends PureComponent {
 				{
 					// 配色列表
 				}
-				<View style={styles.goodsColorScrollContainer}>
-					<ScrollView style={styles.goodsColorScrollView} horizontal showsHorizontalScrollIndicator={false}>
-						{
-							goodsColorArr.map((item, index) => {
-								return (
-									<View style={styles.goodsColorContainer} key={`item${index}`}>
-										<Image style={styles.goodsColorImg} source={{ uri: `${IMG_HOST}/${item.img}` }} />
-										<View style={[styles.goodsColorNameContainer, styles.goodsColorNameContainerSelected]}>
-											<Text style={[styles.goodsColorName, styles.goodsColorNameSelected]}>
-												{ item.color_name }
-											</Text>
-										</View>
-									</View>
-								);
-							})
-						}
-					</ScrollView>
-				</View>
+				<GoodsColorScrollView
+					goodsColorArr={goodsColorArr}
+					targetGoodsColorId={targetGoodsColorId}
+					onGoodsColorChange={ async (goodsColorId) => {
+						await this.onFetchGoodsColor(goodsColorId);
+					}}
+				/>
 				{
 					// 尺寸选择器
 				}
@@ -165,7 +156,7 @@ export default class DetailScene extends PureComponent {
 		return (
 			<View style={styles.goodsContainer}>
 				<View style={styles.goodsContainerLeft}>
-					<Image style={styles.goodsImg} source={{ uri: item.img }} />
+					<Image style={styles.goodsImg} source={{ uri: `${IMG_HOST}/${item.img}` }} />
 					<View style={styles.goodsInfoContainer}>
 						<View style={styles.goodsPlatformContainer}>
 							<Image style={styles.platformLogo} source={require('../../imgs/logo_finishline.png')} />
@@ -173,13 +164,13 @@ export default class DetailScene extends PureComponent {
 								{ item.platform }
 							</Text>
 						</View>
-						<Text style={styles.goodsSizeTxt}>
-							{ item.size }
+						<Text style={styles.goodsSizeTxt} numberOfLines={1}>
+							{ item.size.join(',') }
 						</Text>
 					</View>
 				</View>
 				<Text style={styles.goodsPrice}>
-					$ 69.99
+					$ { item.lowerPrice }
 				</Text>
 			</View>
 		);
@@ -230,43 +221,6 @@ const styles = StyleSheet.create({
 		color: '#4A4A4A',
 		marginLeft: toDips(24),
 		marginTop: toDips(8),
-	},
-	goodsColorScrollContainer: {
-		height: toDips(210),
-		marginTop: toDips(16),
-	},
-	goodsColorScrollView: {
-		width: toDips(750),
-	},
-	goodsColorContainer: {
-		width: toDips(166),
-		height: toDips(210),
-		borderColor: '#E1E0E0',
-		borderWidth: toDips(2),
-		marginLeft: toDips(8),
-		marginRight: toDips(8),
-		alignItems: 'center',
-	},
-	goodsColorImg: {
-		width: toDips(120),
-		height: toDips(120),
-		marginTop: toDips(16),
-	},
-	goodsColorNameContainer: {
-		alignItems: 'center',
-		justifyContent: 'center',
-		flex: 1,
-		width: toDips(166),
-	},
-	goodsColorNameContainerSelected: {
-		backgroundColor: '#D0021B',
-	},
-	goodsColorName: {
-		fontSize: getFontSize(24),
-		color: '#4A4A4A',
-	},
-	goodsColorNameSelected: {
-		color: 'white',
 	},
 	sizeSelector: {
 		backgroundColor: 'rgba(215,216,218,0.28)',
@@ -350,6 +304,7 @@ const styles = StyleSheet.create({
 		marginTop: toDips(20),
 		fontSize: getFontSize(20),
 		color: '#858186',
+		maxWidth: toDips(320),
 	},
 	goodsPrice: {
 		fontSize: getFontSize(28),

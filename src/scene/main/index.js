@@ -269,7 +269,7 @@ export default class MainScene extends PureComponent {
 				onRefresh={async () => {
 					await this.onRefresh();
 				}}
-				refreshing={refreshing}
+				refreshing={refreshing}				
 			/>
 		);
 	}
