@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
 		backgroundColor: 'white',
 	},
 	headerTxt: {
+		fontFamily: 'GillSans-SemiBold',
 		fontSize: getFontSize(34),
 		marginLeft: toDips(32),
 		marginTop: toDips(16),
@@ -120,12 +121,14 @@ const styles = StyleSheet.create({
 		height: toDips(206),
 	},
 	topGoodsColorName: {
+		fontFamily: 'GillSans',
 		color: 'black',
 		fontSize: getFontSize(24),
 		marginTop: toDips(16),
 		alignSelf: 'center',
 	},
 	topGoodsColorPrice: {
+		fontFamily: 'GillSans-SemiBold',
 		fontSize: getFontSize(36),
 		color: 'black',
 		marginTop: toDips(16),

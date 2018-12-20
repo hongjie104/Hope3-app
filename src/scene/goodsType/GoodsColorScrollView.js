@@ -22,6 +22,14 @@ export default class GoodsColorScrollView extends PureComponent {
 		};
 	}
 
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.targetGoodsColorId !== this.state.targetGoodsColorId) {
+			this.setState({
+				targetGoodsColorId: nextProps.targetGoodsColorId,
+			});
+		}
+	}
+
 	render() {
 		const { targetGoodsColorId, goodsColorArr } = this.state;
 		const { onGoodsColorChange } = this.props;		
@@ -30,10 +38,6 @@ export default class GoodsColorScrollView extends PureComponent {
 				style={styles.goodsColorScrollView}
 				horizontal
 				showsHorizontalScrollIndicator={false}
-				scrollEventThrottle={16}
-				onScroll={e => {
-					console.warn(e.nativeEvent.contentOffset.x);
-				}}
 			>
 				{
 					goodsColorArr.map((item, index) => {

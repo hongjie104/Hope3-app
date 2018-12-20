@@ -8,6 +8,7 @@ import {
 	Image,
 	TouchableOpacity,
 	FlatList,
+	SafeAreaView,
 } from 'react-native';
 
 import Swiper from 'react-native-swiper';
@@ -250,27 +251,29 @@ export default class MainScene extends PureComponent {
 		const { recommendGoodsColorArr, refreshing } = this.state;
 		// const goodsItemHeight = toDips(473);
 		return (
-			<FlatList
-				data={recommendGoodsColorArr}
-				// extraData={this.state}
-				// keyExtractor={this._keyExtractor}
-				renderItem={itemData => this.renderGoodsRow(itemData)}
-				ItemSeparatorComponent={() => <View style={{ backgroundColor: '#C2C4CA', height: 1, }} />}
-				// 列表为空时渲染该组件
-				// ListEmptyComponent={() => {}}
-				ListHeaderComponent={() => this.renderHeader()}
-				// getItemLayout={(data, index) => (
-				// 	{ length: goodsItemHeight, offset: goodsItemHeight * index, index }
-				// )}
-				onEndReached={async info => {
-					await this.onLoadMore(info);
-				}}
-				onEndReachedThreshold={0.3}
-				onRefresh={async () => {
-					await this.onRefresh();
-				}}
-				refreshing={refreshing}				
-			/>
+			<SafeAreaView style={styles.container}>
+				<FlatList
+					data={recommendGoodsColorArr}
+					// extraData={this.state}
+					// keyExtractor={this._keyExtractor}
+					renderItem={itemData => this.renderGoodsRow(itemData)}
+					ItemSeparatorComponent={() => <View style={{ backgroundColor: '#C2C4CA', height: 1, }} />}
+					// 列表为空时渲染该组件
+					// ListEmptyComponent={() => {}}
+					ListHeaderComponent={() => this.renderHeader()}
+					// getItemLayout={(data, index) => (
+					// 	{ length: goodsItemHeight, offset: goodsItemHeight * index, index }
+					// )}
+					onEndReached={async info => {
+						await this.onLoadMore(info);
+					}}
+					onEndReachedThreshold={0.3}
+					onRefresh={async () => {
+						await this.onRefresh();
+					}}
+					refreshing={refreshing}
+				/>
+			</SafeAreaView>
 		);
 	}
 
@@ -296,6 +299,7 @@ const styles = StyleSheet.create({
 		backgroundColor: 'white',
 	},
 	headerTxt: {
+		fontFamily: 'GillSans-SemiBold',
 		fontSize: getFontSize(34),
 		marginLeft: toDips(32),
 		marginTop: toDips(16),
@@ -326,6 +330,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	featuredShoesName: {
+		fontFamily: 'GillSans',
 		fontSize: getFontSize(32),
 		color: '#514E4E',
 		maxWidth: toDips(308),
@@ -339,6 +344,7 @@ const styles = StyleSheet.create({
 		width: toDips(308),
 	},
 	featuredShoesPrice: {
+		fontFamily: 'GillSans-SemiBold',
 		color: '#514E4E',
 		fontSize: getFontSize(24),
 	},
@@ -346,6 +352,7 @@ const styles = StyleSheet.create({
 		fontSize: getFontSize(32),
 	},
 	featuredShoesNumShop: {
+		fontFamily: 'GillSans',
 		color: '#181818',
 		fontSize: getFontSize(28),
 	},

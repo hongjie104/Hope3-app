@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -44,6 +43,7 @@
 		CCD263222163BBFD00D4DCC0 /* libRCTZip.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CCD263212163BBC200D4DCC0 /* libRCTZip.a */; };
 		CCD2632C2163BCC900D4DCC0 /* libRNDeviceInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CCD263292163BCB600D4DCC0 /* libRNDeviceInfo.a */; };
 		CCD263362163BD9100D4DCC0 /* libRNFS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CCD263332163BD8200D4DCC0 /* libRNFS.a */; };
+		0D3FFDB8141D437BA9C668B4 /* GillSans.ttc in Resources */ = {isa = PBXBuildFile; fileRef = 500AC8010F054F60B2248BE8 /* GillSans.ttc */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -411,6 +411,7 @@
 		CCD2631C2163BBC200D4DCC0 /* RCTZip.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTZip.xcodeproj; path = "../node_modules/@remobile/react-native-zip/ios/RCTZip.xcodeproj"; sourceTree = "<group>"; };
 		CCD263232163BCB600D4DCC0 /* RNDeviceInfo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNDeviceInfo.xcodeproj; path = "../node_modules/react-native-device-info/ios/RNDeviceInfo.xcodeproj"; sourceTree = "<group>"; };
 		CCD2632D2163BD8200D4DCC0 /* RNFS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNFS.xcodeproj; path = "../node_modules/react-native-fs/RNFS.xcodeproj"; sourceTree = "<group>"; };
+		500AC8010F054F60B2248BE8 /* GillSans.ttc */ = {isa = PBXFileReference; name = "GillSans.ttc"; path = "../src/fonts/GillSans.ttc"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -657,6 +658,7 @@
 				00E356EF1AD99517003FC87E /* HopeAppTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
+				36A2526AC3C2485FA07B3ACC /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -732,6 +734,15 @@
 			);
 			name = Products;
 			sourceTree = "<group>";
+		};
+		36A2526AC3C2485FA07B3ACC /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				500AC8010F054F60B2248BE8 /* GillSans.ttc */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -814,7 +825,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0940;
+				LastUpgradeCheck = 940;
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
@@ -1262,6 +1273,7 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				0D3FFDB8141D437BA9C668B4 /* GillSans.ttc in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

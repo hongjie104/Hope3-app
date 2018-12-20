@@ -7,9 +7,12 @@ import {
 	Image,
 	Text,
 	TouchableOpacity,
+	ScrollView,
+	SafeAreaView,
 } from 'react-native';
 
 import { toDips, getFontSize } from '../../utils/dimensions';
+import { IMG_HOST } from '../../config';
 
 export default class SizeSelector extends PureComponent {
 	
@@ -19,35 +22,40 @@ export default class SizeSelector extends PureComponent {
 
 	constructor(props) {
 		super(props);
+		const { goodsArr } = props.navigation.state.params;
+		// 找出所有的size
+		const sizeAndPriceArr = [];
+		const skuArr = goodsArr.map(goods => goods.sku);
+		let exists = false;
+		for (let i = 0; i < skuArr.length; i++) {
+			for (let j = 0; j < skuArr[i].length; j++) {
+				if (skuArr[i][j].isInStock) {
+					exists = false;
+					for (let m = 0; m < sizeAndPriceArr.length; m++) {
+						if (sizeAndPriceArr[m].size === skuArr[i][j].size) {
+							if (sizeAndPriceArr[m].price > skuArr[i][j].price) {
+								sizeAndPriceArr[m].price = skuArr[i][j].price;
+							}
+							exists = true;
+							break;
+						}
+					}
+					if (!exists) {
+						sizeAndPriceArr.push({
+							size: skuArr[i][j].size,
+							price: skuArr[i][j].price,
+							id: sizeAndPriceArr.length,
+						});
+					}
+				}
+			}
+		}
+		if (sizeAndPriceArr.length > 0) {
+			sizeAndPriceArr[0].isSelected = true;
+		}
 		this.state = {
-			sizeAndPriceArr: [
-				{
-					id: 1,
-					size: '9.5',
-					price: 340.00,
-					isSelected: true,
-				},
-				{
-					id: 2,
-					size: '9.5',
-					price: 340.00,
-				},
-				{
-					id: 3,
-					size: '9.5',
-					price: 340.00,
-				},
-				{
-					id: 4,
-					size: '9.5',
-					price: 340.00,
-				},
-				{
-					id: 5,
-					size: '9.5',
-					price: 340.00,
-				},
-			],
+			sizeAndPriceArr,
+			imgUrl: `${IMG_HOST}/${goodsArr[0].img}`,
 		};
 	}
 
@@ -60,39 +68,40 @@ export default class SizeSelector extends PureComponent {
 	}
 
 	render() {
-		// const { navigate, goBack } = this.props.navigation;
-		const { sizeAndPriceArr } = this.state;
+		const { sizeAndPriceArr, imgUrl } = this.state;
 		return (
-			<View style={styles.container}>
-				<Image style={styles.img} source={{ uri: 'http://pa9m48qrj.bkt.clouddn.com/eastbay/55088031.jpg' }} />
-				<View style={styles.goodsNameContainer}>
-					<Text style={styles.goodsName}>
-						Air Jordan 3 ‘BHM’
-					</Text>
-				</View>
-				<View style={styles.line} />
-				<View style={styles.sizeContainer}>
-					{
-						sizeAndPriceArr.map((sizeAndPrice, index) => (
-							<TouchableOpacity
-								key={`item${index}`}
-								activeOpacity={0.8}
-								onPress={() => {
-									this.onSizePress(sizeAndPrice.id);
-								}}
-								style={[styles.sizeCell, sizeAndPrice.isSelected ? styles.sizeCellSelected : null]}
-							>
-								<Text style={[styles.sizeTxt, sizeAndPrice.isSelected ? styles.sizeTxtSelected : null]}>
-									{ sizeAndPrice.size }
-								</Text>
-								<Text style={[styles.priceTxt, sizeAndPrice.isSelected ? styles.priceTxtSelected : null]}>
-									${ sizeAndPrice.price }
-								</Text>
-							</TouchableOpacity>
-						))
-					}
-				</View>
-			</View>
+			<SafeAreaView style={styles.container}>
+				<ScrollView style={styles.container}>
+					<Image style={styles.img} source={{ uri: imgUrl }} />
+					<View style={styles.goodsNameContainer}>
+						<Text style={styles.goodsName}>
+							Air Jordan 3 ‘BHM’
+						</Text>
+					</View>
+					<View style={styles.line} />
+					<View style={styles.sizeContainer}>
+						{
+							sizeAndPriceArr.map((sizeAndPrice, index) => (
+								<TouchableOpacity
+									key={`item${index}`}
+									activeOpacity={0.8}
+									onPress={() => {
+										this.onSizePress(sizeAndPrice.id);
+									}}
+									style={[styles.sizeCell, sizeAndPrice.isSelected ? styles.sizeCellSelected : null]}
+								>
+									<Text style={[styles.sizeTxt, sizeAndPrice.isSelected ? styles.sizeTxtSelected : null]}>
+										{ sizeAndPrice.size }
+									</Text>
+									<Text style={[styles.priceTxt, sizeAndPrice.isSelected ? styles.priceTxtSelected : null]}>
+										${ sizeAndPrice.price }
+									</Text>
+								</TouchableOpacity>
+							))
+						}
+					</View>
+				</ScrollView>
+			</SafeAreaView>
 		);
 	}
 }

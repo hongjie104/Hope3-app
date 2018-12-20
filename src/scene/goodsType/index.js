@@ -8,6 +8,8 @@ import {
 	Image,
 	FlatList,
 	TouchableOpacity,
+	ScrollView,
+	SafeAreaView,
 } from 'react-native';
 import GoodsColorScrollView from './GoodsColorScrollView';
 import { getGoodsType, getGoodsColor } from '../../service';
@@ -28,6 +30,7 @@ export default class DetailScene extends PureComponent {
 			goodsColorArr: [],
 			goodsArr: [],
 			targetGoodsColorId: null,
+			targetSize: 0,
 		};
 	}
 
@@ -46,7 +49,6 @@ export default class DetailScene extends PureComponent {
 			goodsArr,
 		} = data;
 
-		
 		this.setState({
 			goodsType,
 			goodsColorArr,
@@ -56,10 +58,11 @@ export default class DetailScene extends PureComponent {
 	}
 
 	navigateToSizeSelector() {
+		const { goodsArr } = this.state;
 		const { navigate } = this.props.navigation;
 		navigate({
 			routeName: 'shoesSizeSelector',
-			params: { mode: 'modal' },
+			params: { mode: 'modal', goodsArr },
 		});
 	}
 
@@ -73,6 +76,7 @@ export default class DetailScene extends PureComponent {
 				size: sku.map(sizeMapFunc),
 				lowerPrice: sku.sort((a, b) => a.price - b.price)[0].price,
 				key: g._id,
+				sku,
 			};
 		};
 		return goodsArr.map(goodsMapFunc);
@@ -93,7 +97,8 @@ export default class DetailScene extends PureComponent {
 	}
 
 	renderHeader() {
-		const { goodsColorArr, targetGoodsColorId } = this.state;
+		const { goodsColorArr, targetGoodsColorId, goodsArr } = this.state;
+		let { targetSize } = this.state;
 		let goodsColor = goodsColorArr[0];
 		for (let i = 0; i < goodsColorArr.length; i++) {
 			if (goodsColorArr[i]._id === targetGoodsColorId) {
@@ -102,59 +107,66 @@ export default class DetailScene extends PureComponent {
 			}
 		}
 		if (!goodsColor) { return null; }
+		if (targetSize < 1) {
+			if (Array.isArray(goodsArr) && goodsArr.length > 0) {
+				targetSize = goodsArr[0].size[0];
+			}
+		}
 		return (
-			<View style={styles.container}>
-				<Image style={styles.mainImg} source={{ uri: `${IMG_HOST}/${goodsColor.img}` }} />
-				<Text style={styles.mainName}>
-					{ goodsColor.name }
-				</Text>
-				<Text style={styles.mainColor}>
-					{ goodsColor.color_name }
-				</Text>
-				{
-					// 配色列表
-				}
-				<GoodsColorScrollView
-					goodsColorArr={goodsColorArr}
-					targetGoodsColorId={targetGoodsColorId}
-					onGoodsColorChange={ async (goodsColorId) => {
-						await this.onFetchGoodsColor(goodsColorId);
-					}}
-				/>
-				{
-					// 尺寸选择器
-				}
-				<TouchableOpacity
-					activeOpacity={0.8}
-					onPress={() => {
-						this.navigateToSizeSelector();
-					}}
-					style={styles.sizeSelector}
-				>
-					<Text style={styles.sizeSelectorTitle}>
-						Select a size
+			<SafeAreaView style={styles.container}>
+				<View style={styles.container}>
+					<Image style={styles.mainImg} source={{ uri: `${IMG_HOST}/${goodsColor.img}` }} />
+					<Text style={styles.mainName}>
+						{ goodsColor.name }
 					</Text>
-					<View style={styles.sizeSelectorValueContainer}>
-						<Text style={styles.sizeSelectorValue}>
-							12.5
+					<Text style={styles.mainColor}>
+						{ goodsColor.color_name }
+					</Text>
+					{
+						// 配色列表
+					}
+					<GoodsColorScrollView
+						goodsColorArr={goodsColorArr}
+						targetGoodsColorId={targetGoodsColorId}
+						onGoodsColorChange={ async (goodsColorId) => {
+							await this.onFetchGoodsColor(goodsColorId);
+						}}
+					/>
+					{
+						// 尺寸选择器
+					}
+					<TouchableOpacity
+						activeOpacity={0.8}
+						onPress={() => {
+							this.navigateToSizeSelector();
+						}}
+						style={styles.sizeSelector}
+					>
+						<Text style={styles.sizeSelectorTitle}>
+							Select a size
 						</Text>
-						<Image style={styles.imgArrowDown} source={require('../../imgs/arrow_down.png')} />
-					</View>
-				</TouchableOpacity>
-				{
-					// 商品列表
-				}
-				<Text style={styles.goodsTitle}>
-					Available Stores
-				</Text>
-				<View style={styles.goodsLine} />
-			</View>
+						<View style={styles.sizeSelectorValueContainer}>
+							<Text style={styles.sizeSelectorValue}>
+								{ targetSize }
+							</Text>
+							<Image style={styles.imgArrowDown} source={require('../../imgs/arrow_down.png')} />
+						</View>
+					</TouchableOpacity>
+					{
+						// 商品列表
+					}
+					<Text style={styles.goodsTitle}>
+						Available Stores
+					</Text>
+					<View style={styles.goodsLine} />
+				</View>
+			</SafeAreaView>
 		);
 	}
 
-	renderGoods({ item, index }) {
+	renderGoods(item, index) {
 		return (
-			<View style={styles.goodsContainer}>
+			<View style={styles.goodsContainer} key={index}>
 				<View style={styles.goodsContainerLeft}>
 					<Image style={styles.goodsImg} source={{ uri: `${IMG_HOST}/${item.img}` }} />
 					<View style={styles.goodsInfoContainer}>
@@ -179,22 +191,34 @@ export default class DetailScene extends PureComponent {
 	render() {
 		const { goodsArr } = this.state;
 		const goodsItemHeight = toDips(184);
+		// return (
+		// 	<FlatList
+		// 		data={goodsArr}
+		// 		// extraData={this.state}
+		// 		// keyExtractor={this._keyExtractor}
+		// 		renderItem={this.renderGoods}
+		// 		ItemSeparatorComponent={() => <View style={{ backgroundColor: '#C2C4CA', height: 1, }} />}
+		// 		// 列表为空时渲染该组件
+		// 		// ListEmptyComponent={() => {}}
+		// 		ListHeaderComponent={() => {
+		// 			return this.renderHeader();
+		// 		}}
+		// 		getItemLayout={(data, index) => (
+		// 			{ length: goodsItemHeight, offset: goodsItemHeight * index, index }
+		// 		)}
+		// 	/>
+		// );
 		return (
-			<FlatList
-				data={goodsArr}
-				// extraData={this.state}
-				// keyExtractor={this._keyExtractor}
-				renderItem={this.renderGoods}
-				ItemSeparatorComponent={() => <View style={{ backgroundColor: '#C2C4CA', height: 1, }} />}
-				// 列表为空时渲染该组件
-				// ListEmptyComponent={() => {}}
-				ListHeaderComponent={() => {
-					return this.renderHeader();
-				}}
-				getItemLayout={(data, index) => (
-					{ length: goodsItemHeight, offset: goodsItemHeight * index, index }
-				)}
-			/>
+			<ScrollView style={styles.container}>
+				{
+					this.renderHeader()
+				}
+				{
+					goodsArr.map((goods, i) => {
+						return this.renderGoods(goods, i);
+					})
+				}
+			</ScrollView>
 		);
 	}
 }
@@ -210,13 +234,15 @@ const styles = StyleSheet.create({
 		alignSelf: 'center',
 	},
 	mainName: {
+		fontFamily: 'GillSans-SemiBold',
 		fontSize: getFontSize(32),
 		color: '#4A4A4A',
-		fontWeight: 'bold',
+		// fontWeight: 'bold',
 		marginLeft: toDips(24),
 		marginTop: toDips(24),
 	},
 	mainColor: {
+		fontFamily: 'GillSans',
 		fontSize: getFontSize(24),
 		color: '#4A4A4A',
 		marginLeft: toDips(24),
