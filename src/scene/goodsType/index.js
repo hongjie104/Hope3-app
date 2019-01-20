@@ -30,7 +30,7 @@ export default class DetailScene extends PureComponent {
 			goodsColorArr: [],
 			goodsArr: [],
 			targetGoodsColorId: null,
-			targetSize: 0,
+			targetSize: null,
 		};
 	}
 
@@ -62,7 +62,16 @@ export default class DetailScene extends PureComponent {
 		const { navigate } = this.props.navigation;
 		navigate({
 			routeName: 'shoesSizeSelector',
-			params: { mode: 'modal', goodsArr },
+			params: {
+				mode: 'modal',
+				onSizeChange: size => {
+					this.setState({
+						targetSize: size,
+					});
+				},
+				targetSize: this.targetSize,
+				goodsArr,
+			},
 		});
 	}
 
@@ -83,6 +92,9 @@ export default class DetailScene extends PureComponent {
 	}
 
 	async onFetchGoodsColor(goodsColorId) {
+		this.setState({
+			targetSize: null,
+		});
 		let data = null;
 		try {
 			data = await getGoodsColor(goodsColorId);
@@ -107,60 +119,59 @@ export default class DetailScene extends PureComponent {
 			}
 		}
 		if (!goodsColor) { return null; }
-		if (targetSize < 1) {
+		if (!targetSize) {
 			if (Array.isArray(goodsArr) && goodsArr.length > 0) {
 				targetSize = goodsArr[0].size[0];
 			}
 		}
+		this.targetSize = targetSize;
 		return (
-			<SafeAreaView style={styles.container}>
-				<View style={styles.container}>
-					<Image style={styles.mainImg} source={{ uri: `${IMG_HOST}/${goodsColor.img}` }} />
-					<Text style={styles.mainName}>
-						{ goodsColor.name }
+			<View style={styles.container}>
+				<Image style={styles.mainImg} source={{ uri: `${IMG_HOST}/${goodsColor.img}` }} />
+				<Text style={styles.mainName}>
+					{ goodsColor.name }
+				</Text>
+				<Text style={styles.mainColor}>
+					{ goodsColor.color_name }
+				</Text>
+				{
+					// 配色列表
+				}
+				<GoodsColorScrollView
+					goodsColorArr={goodsColorArr}
+					targetGoodsColorId={targetGoodsColorId}
+					onGoodsColorChange={ async (goodsColorId) => {
+						await this.onFetchGoodsColor(goodsColorId);
+					}}
+				/>
+				{
+					// 尺寸选择器
+				}
+				<TouchableOpacity
+					activeOpacity={0.8}
+					onPress={() => {
+						this.navigateToSizeSelector();
+					}}
+					style={styles.sizeSelector}
+				>
+					<Text style={styles.sizeSelectorTitle}>
+						Select a size
 					</Text>
-					<Text style={styles.mainColor}>
-						{ goodsColor.color_name }
-					</Text>
-					{
-						// 配色列表
-					}
-					<GoodsColorScrollView
-						goodsColorArr={goodsColorArr}
-						targetGoodsColorId={targetGoodsColorId}
-						onGoodsColorChange={ async (goodsColorId) => {
-							await this.onFetchGoodsColor(goodsColorId);
-						}}
-					/>
-					{
-						// 尺寸选择器
-					}
-					<TouchableOpacity
-						activeOpacity={0.8}
-						onPress={() => {
-							this.navigateToSizeSelector();
-						}}
-						style={styles.sizeSelector}
-					>
-						<Text style={styles.sizeSelectorTitle}>
-							Select a size
+					<View style={styles.sizeSelectorValueContainer}>
+						<Text style={styles.sizeSelectorValue}>
+							{ targetSize }
 						</Text>
-						<View style={styles.sizeSelectorValueContainer}>
-							<Text style={styles.sizeSelectorValue}>
-								{ targetSize }
-							</Text>
-							<Image style={styles.imgArrowDown} source={require('../../imgs/arrow_down.png')} />
-						</View>
-					</TouchableOpacity>
-					{
-						// 商品列表
-					}
-					<Text style={styles.goodsTitle}>
-						Available Stores
-					</Text>
-					<View style={styles.goodsLine} />
-				</View>
-			</SafeAreaView>
+						<Image style={styles.imgArrowDown} source={require('../../imgs/arrow_down.png')} />
+					</View>
+				</TouchableOpacity>
+				{
+					// 商品列表
+				}
+				<Text style={styles.goodsTitle}>
+					Available Stores
+				</Text>
+				<View style={styles.goodsLine} />
+			</View>
 		);
 	}
 
@@ -209,16 +220,18 @@ export default class DetailScene extends PureComponent {
 		// 	/>
 		// );
 		return (
-			<ScrollView style={styles.container}>
-				{
-					this.renderHeader()
-				}
-				{
-					goodsArr.map((goods, i) => {
-						return this.renderGoods(goods, i);
-					})
-				}
-			</ScrollView>
+			<SafeAreaView style={styles.container}>
+				<ScrollView style={styles.container}>
+					{
+						this.renderHeader()
+					}
+					{
+						goodsArr.map((goods, i) => {
+							return this.renderGoods(goods, i);
+						})
+					}
+				</ScrollView>
+			</SafeAreaView>
 		);
 	}
 }

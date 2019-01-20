@@ -22,7 +22,7 @@ export default class SizeSelector extends PureComponent {
 
 	constructor(props) {
 		super(props);
-		const { goodsArr } = props.navigation.state.params;
+		const { goodsArr, targetSize } = props.navigation.state.params;
 		// 找出所有的size
 		const sizeAndPriceArr = [];
 		const skuArr = goodsArr.map(goods => goods.sku);
@@ -45,13 +45,11 @@ export default class SizeSelector extends PureComponent {
 							size: skuArr[i][j].size,
 							price: skuArr[i][j].price,
 							id: sizeAndPriceArr.length,
+							isSelected: skuArr[i][j].size === targetSize,
 						});
 					}
 				}
 			}
-		}
-		if (sizeAndPriceArr.length > 0) {
-			sizeAndPriceArr[0].isSelected = true;
 		}
 		this.state = {
 			sizeAndPriceArr,
@@ -61,10 +59,23 @@ export default class SizeSelector extends PureComponent {
 
 	onSizePress(id) {
 		const sizeAndPriceArr = [...this.state.sizeAndPriceArr];
+		let targetSize = null;
 		for (let i = 0; i < sizeAndPriceArr.length; i++) {
-			sizeAndPriceArr[i].isSelected = sizeAndPriceArr[i].id === id;
+			if (sizeAndPriceArr[i].id === id) {
+				sizeAndPriceArr[i].isSelected = true;
+				targetSize = sizeAndPriceArr[i].size;
+			} else {
+				sizeAndPriceArr[i].isSelected = false;
+			}
 		}
-		this.setState({ sizeAndPriceArr });
+		this.setState({ sizeAndPriceArr }, () => {
+			const t = setTimeout(() => {
+				clearTimeout(t);
+				const { state: { params: { onSizeChange } }, goBack } = this.props.navigation;
+				onSizeChange && onSizeChange(targetSize);
+				goBack();
+			}, 50);
+		});
 	}
 
 	render() {
