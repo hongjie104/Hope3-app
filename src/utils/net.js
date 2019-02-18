@@ -40,6 +40,7 @@ export function post(url, data) {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
+                Authorization: `Bearer ${global.token}`,
             },
             body: JSON.stringify(data),
         }), TIME_OUT)
@@ -73,9 +74,11 @@ export function get(url) {
             reject('net is not Connected');
             return;
         }
-        timeout(fetch(url), TIME_OUT)
+        timeout(fetch(url, { headers: { Authorization: `Bearer ${global.token}` } }), TIME_OUT)
             .then(response => response.text())
             .then((responseText) => {
+                console.log('aaaaaaaaaaaaaaaa');
+                console.log(responseText);
                 // on success
                 let jsonData = null;
                 try {

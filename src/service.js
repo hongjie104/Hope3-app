@@ -8,6 +8,14 @@ import { get, post } from './utils/net';
 // 	});
 // }
 
+export function register(name, email, password) {
+	return post(`${SERVER_HOST}/api/app/user/register`, { name, email, password });
+}
+
+export function login(email, password) {
+	return post(`${SERVER_HOST}/api/app/user/login`, { email, password });
+}
+
 export function getHomeData(seriesCount, popularGoodsColorCount, recommendGoodsColorCount) {
 	return get(`${SERVER_HOST}/api/app/home/${seriesCount}/${popularGoodsColorCount}/${recommendGoodsColorCount}`);
 }
