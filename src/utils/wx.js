@@ -42,7 +42,6 @@ export function login() {
 					"unionid":"oxTU3w3vGnrPCZ8_J280Ji9BnvIQ"
 				}
 				 */
-				
 				// 再获取用户信息
 				net.get(`https://api.weixin.qq.com/sns/userinfo?access_token=${data.access_token}&openid=${data.openid}`, (data) => {
 					// {

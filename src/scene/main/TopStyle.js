@@ -53,7 +53,7 @@ export default class TopStyle extends PureComponent {
 							<Text style={styles.topShoesMoreText}>
 								MORE
 							</Text>
-						</View>	
+						</View>
 					</TouchableOpacity>
 				</View>
 			</View>
