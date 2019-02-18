@@ -11,6 +11,7 @@ import LoginScene from './index';
 import Button from '../../components/Button';
 import { toDips, getFontSize } from '../../utils/dimensions';
 import { isEmail } from '../../utils/reg';
+import toast from '../../utils/toast';
 
 export default class ReigsterScene extends LoginScene {
 	

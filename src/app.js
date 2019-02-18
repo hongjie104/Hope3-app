@@ -11,6 +11,7 @@ import { NavigationActions } from 'react-navigation';
 import toast from './utils/toast';
 import * as deviceInfo from './utils/deviceInfo';
 // import logArr from './store/logArr';
+import { loadLocalData } from './utils/storage';
 
 let AppNavigation = null;
 
@@ -47,7 +48,20 @@ export default class App extends PureComponent {
 	}
 
 	componentDidMount() {
-		AppNavigation = createAppNavigation('');
+		this.checkLogin();
+	}
+
+	checkLogin() {
+		loadLocalData('token', token => {
+			global.token = token;
+			this.init(token);
+		}, () => {
+			this.init();
+		});
+	}
+
+	init(token) {
+		AppNavigation = createAppNavigation(token);
 		if (!deviceInfo.isIOS()) {
 			const defaultStateAction = AppNavigation.router.getStateForAction;
 			AppNavigation.router.getStateForAction = (action, state) => {

@@ -17,6 +17,7 @@ import { toDips, getFontSize } from '../../utils/dimensions';
 import * as service from '../../service';
 import { saveLocalData } from '../../utils/storage';
 import navigation from '../../utils/navigation';
+import toast from '../../utils/toast';
 
 export default class RegisterUserScene extends PureComponent {
 	
@@ -76,6 +77,7 @@ export default class RegisterUserScene extends PureComponent {
 			});
 		} catch (e) {
 			console.warn(e);
+			toast(e.msg);
 		}
 	}
 

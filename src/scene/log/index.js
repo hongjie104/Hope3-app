@@ -12,6 +12,10 @@ import { observer, inject } from 'mobx-react/native';
 import * as datetime from '../../utils/datetime';
 import * as dimensions from '../../utils/dimensions';
 import toast from '../../utils/toast';
+import { removeLocalData } from '../../utils/storage';
+import navigation from '../../utils/navigation';
+
+import Button from '../../components/Button';
 
 // import { FloatingAction } from 'react-native-floating-action';
 
@@ -35,6 +39,14 @@ export default class LogScene extends Component {
 				<Text style={{}}>
 					log Scene
 				</Text>
+				<Button
+					content='logout'
+					onPress={() => {
+						global.token = '';
+						removeLocalData('token');
+						navigation.reset(this.props.navigation, 'UnLoginScene');
+					}}
+				/>
 				<ScrollView style={styles.container}>
 					{
 						logArr.arr.map(this.renderLog)
