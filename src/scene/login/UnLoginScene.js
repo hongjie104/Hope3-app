@@ -9,6 +9,7 @@ import {
 
 import Button from '../../components/Button';
 import { toDips, getFontSize } from '../../utils/dimensions';
+import { THEME_COLOR } from '../../config';
 
 export default class UnLoginScene extends PureComponent {
 	
@@ -16,7 +17,7 @@ export default class UnLoginScene extends PureComponent {
 		title: '',
 		headerStyle: {
 			// // 导航栏颜色
-			backgroundColor: '#EEF0F3',
+			backgroundColor: THEME_COLOR,
 			borderBottomWidth: 0,
 		},
 	});
@@ -72,7 +73,7 @@ export default class UnLoginScene extends PureComponent {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: '#EEF0F3',
+		backgroundColor: THEME_COLOR,
 	},
 	title: {
 		fontSize: toDips(48),

@@ -46,7 +46,12 @@ export default class TopStyle extends PureComponent {
 					}
 					<TouchableOpacity
 						activeOpacity={0.8}
-						onPress={() => { }}
+						onPress={() => {
+							const { navigate } = this.props.navigation;
+							navigate({
+								routeName: 'SeriesSearch',
+							});
+						}}
 						style={styles.topShoesCell}
 					>
 						<View style={styles.topShoesMore}>

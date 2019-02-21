@@ -18,6 +18,7 @@ import * as service from '../../service';
 import { saveLocalData } from '../../utils/storage';
 import navigation from '../../utils/navigation';
 import toast from '../../utils/toast';
+import { THEME_COLOR } from '../../config';
 
 export default class RegisterUserScene extends PureComponent {
 	
@@ -132,7 +133,7 @@ export default class RegisterUserScene extends PureComponent {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: '#EEF0F3',
+		backgroundColor: THEME_COLOR,
 	},
 	avatarContainer: {
 		width: toDips(194),

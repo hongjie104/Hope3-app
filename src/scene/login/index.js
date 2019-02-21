@@ -14,6 +14,7 @@ import { isEmail } from '../../utils/reg';
 import * as service from '../../service';
 import { saveLocalData } from '../../utils/storage';
 import navigation from '../../utils/navigation';
+import { THEME_COLOR } from '../../config';
 
 export default class LoginScene extends PureComponent {
 	
@@ -119,7 +120,7 @@ export default class LoginScene extends PureComponent {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: '#EEF0F3',
+		backgroundColor: THEME_COLOR,
 	},
 	input: {
 		width: toDips(536),

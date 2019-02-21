@@ -15,8 +15,11 @@ import LogScene from '../scene/log';
 import MainScene from '../scene/main';
 import GoodsTypeScene from '../scene/goodsType';
 import ShoesSizeSelector from '../scene/goodsType/SizeSelector';
+import SeriesSearch from '../scene/goodsSeries/SeriesSearch';
+import SeriesShoes from '../scene/goodsSeries/SeriesShoes';
 
 import { getFontSize } from '../utils/dimensions';
+import { THEME_COLOR } from '../config';
 
 import StackViewStyleInterpolator from "react-navigation-stack/dist/views/StackView/StackViewStyleInterpolator";
 
@@ -52,13 +55,15 @@ export default function createAppNavigation(isLogedIn) {
 		RegisterScene,
 		RegisterUserScene,
 		GoodsTypeScene,
+		SeriesSearch,
+		SeriesShoes,
 		shoesSizeSelector: ShoesSizeSelector,
 		test1: TestScene1,
 		test2: TestScene2,
 		test3: TestScene3,
 		logScene: LogScene,
 	}, {
-		initialRouteName: isLogedIn ? 'main' : 'UnLoginScene',
+		initialRouteName: isLogedIn ? 'SeriesShoes' : 'UnLoginScene',
 		// initialRouteName: 'RegisterUserScene',
 		// mode: 'card',
 		// headerMode: 'none',
@@ -68,7 +73,7 @@ export default function createAppNavigation(isLogedIn) {
 			headerStyle: {
 				// backgroundColor: '#DD4124',
 				// 导航栏颜色
-				backgroundColor: '#EEF0F3',
+				backgroundColor: THEME_COLOR,
 				shadowOpacity: 0,
 				elevation: 0,
 				borderBottomWidth: 0,

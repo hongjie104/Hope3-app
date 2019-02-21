@@ -12,7 +12,8 @@ import {
 } from 'react-native';
 
 import Swiper from 'react-native-swiper';
-import HeaderTitle from './HeaderTitle';
+import SearchBar from '../../components/SearchBar';
+import GoodsCell from '../../components/GoodsCell';
 import TopStyle from './TopStyle';
 import PopularGoodsColor from './PopularGoodsColor';
 import { toDips, getFontSize } from '../../utils/dimensions';
@@ -29,7 +30,7 @@ export default class MainScene extends PureComponent {
 			headerStyle: {
 				backgroundColor: 'black',
 			},
-			headerTitle: <HeaderTitle onHeaderPress={(val) => { self.onHeaderPress(val); }} />,
+			headerTitle: <SearchBar onPress={(val) => { self.onSearchBarPress(val); }} title='Search Bar' />,
 			// tabBarIcon: ({ focused, tintColor }) => {
 			// 	const img = focused ? require('../../imgs/syax.png') : require('../../imgs/sy.png');
 			// 	return <Image style={{ width: toDips(50), height: toDips(50), }} source={img} />;
@@ -62,7 +63,7 @@ export default class MainScene extends PureComponent {
 
 	async componentDidMount() {
 		// this.props.navigation.setParams({
-		// 	a: this.onHeaderPress.bind(this),
+		// 	a: this.onSearchBarPress.bind(this),
 		// 	b: '10',
 		// });
 		self = this;
@@ -125,7 +126,7 @@ export default class MainScene extends PureComponent {
 		}
 	}
 
-	onHeaderPress(val) {
+	onSearchBarPress(val) {
 		
 	}
 
@@ -183,7 +184,7 @@ export default class MainScene extends PureComponent {
 				{
 					// top styles
 				}
-				<TopStyle topSeriesArr={topSeriesArr} />
+				<TopStyle topSeriesArr={topSeriesArr} navigation={this.props.navigation} />
 				{
 					// Most Popular
 				}
@@ -208,28 +209,13 @@ export default class MainScene extends PureComponent {
 	renderGoods(item, isLeft = false) {
 		if (item) {
 			return (
-				<TouchableOpacity
-					activeOpacity={0.8}
-					onPress={() => {
-						this.onGoodsColorPressed(item._id, item.goods_type_id);
+				<GoodsCell
+					goods={item}
+					style={isLeft ? styles.featuredShoesCellLeft : null}
+					onPress={(goods) => {
+						this.onGoodsColorPressed(goods._id, goods.goods_type_id);
 					}}
-					style={[styles.featuredShoesCell, isLeft ? styles.featuredShoesCellLeft : null]}
-				>
-					<Image style={styles.featuredShoesImg} source={{ uri: `${IMG_HOST}/${item.img}` }} />
-					<View style={styles.featuredShoesNameContainer}>
-						<Text style={styles.featuredShoesName} numberOfLines={2}>
-							{ item.name }
-						</Text>
-					</View>
-					<View style={styles.featuredShoesInfo}>
-						<Text style={styles.featuredShoesPrice}>
-							from $<Text style={styles.featuredShoesBigPrice}>{ item.price }</Text>
-						</Text>
-						<Text style={styles.featuredShoesNumShop}>
-							{ item.numShop } shops
-						</Text>
-					</View>
-				</TouchableOpacity>
+				/>
 			);
 		}
 	}
@@ -311,49 +297,8 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		backgroundColor: 'white',
 	},
-	featuredShoesCell: {
-		flex: 1,
-		alignItems: 'center',
-	},
 	featuredShoesCellLeft: {
 		borderRightWidth: 1,
 		borderColor: '#E1E2E5',
-	},
-	featuredShoesImg: {
-		width: toDips(120),
-		height: toDips(120),
-		marginTop: toDips(32),
-	},
-	featuredShoesNameContainer: {
-		marginTop: toDips(16),
-		height: toDips(99),
-		justifyContent: 'center',
-	},
-	featuredShoesName: {
-		fontFamily: 'GillSans',
-		fontSize: getFontSize(32),
-		color: '#514E4E',
-		maxWidth: toDips(308),
-	},
-	featuredShoesInfo: {
-		flexDirection: 'row',
-		alignItems: 'flex-end',
-		justifyContent: 'space-between',
-		marginTop: toDips(16),
-		marginBottom: toDips(32),
-		width: toDips(308),
-	},
-	featuredShoesPrice: {
-		fontFamily: 'GillSans-SemiBold',
-		color: '#514E4E',
-		fontSize: getFontSize(24),
-	},
-	featuredShoesBigPrice: {
-		fontSize: getFontSize(32),
-	},
-	featuredShoesNumShop: {
-		fontFamily: 'GillSans',
-		color: '#181818',
-		fontSize: getFontSize(28),
 	},
 });

@@ -32,6 +32,10 @@ export function getGoodsColor(goodsColorId) {
 	return get(`${SERVER_HOST}/api/app/goodsColor/${goodsColorId}`);
 }
 
+export function getBrand(page = 1, pageSize = 10) {
+	return get(`${SERVER_HOST}/api/app/brand?page=${page}&pageSize=${pageSize}`);
+}
+
 // export function getTopSeries(count) {
 // 	return get(`${SERVER_HOST}/api/app/series/top/${count}`);
 // }
