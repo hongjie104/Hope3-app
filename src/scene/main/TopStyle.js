@@ -76,7 +76,8 @@ const styles = StyleSheet.create({
 		fontSize: getFontSize(34),
 		marginLeft: toDips(32),
 		marginTop: toDips(16),
-		fontFamily: 'GillSans-SemiBold',
+		// fontFamily: 'GillSans-SemiBold',
+		fontFamily: 'ArialMTStd-LightCond',
 	},
 	topShoesContainer: {
 		flexDirection: 'row',
@@ -104,7 +105,8 @@ const styles = StyleSheet.create({
 		height: toDips(96),
 	},
 	topShoesName: {
-		fontFamily: 'GillSans',
+		// fontFamily: 'GillSans',
+		fontFamily: 'ArialMTStd-LightCond',
 		fontSize: getFontSize(20),
 		marginTop: toDips(16),
 	},

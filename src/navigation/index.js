@@ -63,7 +63,7 @@ export default function createAppNavigation(isLogedIn) {
 		test3: TestScene3,
 		logScene: LogScene,
 	}, {
-		initialRouteName: isLogedIn ? 'SeriesShoes' : 'UnLoginScene',
+		initialRouteName: isLogedIn ? 'main' : 'UnLoginScene',
 		// initialRouteName: 'RegisterUserScene',
 		// mode: 'card',
 		// headerMode: 'none',

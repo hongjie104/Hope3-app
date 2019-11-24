@@ -155,7 +155,8 @@ const styles = StyleSheet.create({
 	},
 	seriesTxt: {
 		fontSize: getFontSize(24),
-		fontFamily: 'GillSans',
+		// fontFamily: 'GillSans',
+		fontFamily: 'ArialMTStd-LightCond',
 		color: '#252525',
 		marginTop: toDips(16),
 	},

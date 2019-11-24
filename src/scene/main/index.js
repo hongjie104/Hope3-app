@@ -243,7 +243,7 @@ export default class MainScene extends PureComponent {
 					// extraData={this.state}
 					// keyExtractor={this._keyExtractor}
 					renderItem={itemData => this.renderGoodsRow(itemData)}
-					ItemSeparatorComponent={() => <View style={{ backgroundColor: '#C2C4CA', height: 1, }} />}
+					ItemSeparatorComponent={() => <View style={{ backgroundColor: '#f7f7f7', height: 1, }} />}
 					// 列表为空时渲染该组件
 					// ListEmptyComponent={() => {}}
 					ListHeaderComponent={() => this.renderHeader()}
@@ -285,7 +285,8 @@ const styles = StyleSheet.create({
 		backgroundColor: 'white',
 	},
 	headerTxt: {
-		fontFamily: 'GillSans-SemiBold',
+		// fontFamily: 'GillSans-SemiBold',
+		fontFamily: 'ArialMTStd-LightCond',
 		fontSize: getFontSize(34),
 		marginLeft: toDips(32),
 		marginTop: toDips(16),
@@ -299,6 +300,6 @@ const styles = StyleSheet.create({
 	},
 	featuredShoesCellLeft: {
 		borderRightWidth: 1,
-		borderColor: '#E1E2E5',
+		borderColor: '#f7f7f7',
 	},
 });

@@ -44,7 +44,8 @@ const styles = StyleSheet.create({
 	},
 	txt: {
 		fontSize: toDips(36),
-		fontFamily: 'GillSans-SemiBold',
+		// fontFamily: 'GillSans-SemiBold',
+		fontFamily: 'ArialMTStd-LightCond',
 		// font-weight:600;
 		color: 'white',
 	},

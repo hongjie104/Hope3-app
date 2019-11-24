@@ -57,7 +57,8 @@ const styles = StyleSheet.create({
 	},
 	txt: {
 		fontSize: getFontSize(28),
-		fontFamily: 'GillSans',
+		// fontFamily: 'GillSans',
+		fontFamily: 'ArialMTStd-LightCond',
 		color: '#ccc',
 		marginLeft: toDips(16),
 	},

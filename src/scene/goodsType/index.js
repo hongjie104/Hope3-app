@@ -247,7 +247,8 @@ const styles = StyleSheet.create({
 		alignSelf: 'center',
 	},
 	mainName: {
-		fontFamily: 'GillSans-SemiBold',
+		// fontFamily: 'GillSans-SemiBold',
+		fontFamily: 'ArialMTStd-LightCond',
 		fontSize: getFontSize(32),
 		color: '#4A4A4A',
 		// fontWeight: 'bold',
@@ -255,7 +256,8 @@ const styles = StyleSheet.create({
 		marginTop: toDips(24),
 	},
 	mainColor: {
-		fontFamily: 'GillSans',
+		// fontFamily: 'GillSans',
+		fontFamily: 'ArialMTStd-LightCond',
 		fontSize: getFontSize(24),
 		color: '#4A4A4A',
 		marginLeft: toDips(24),
