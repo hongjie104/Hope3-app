@@ -14,7 +14,7 @@
     "mobx": "^5.5.0",
     "mobx-react": "^5.2.8",
     "react": "16.6.0-alpha.8af6728",
-    "react-native": "0.57.3",
+    "react-native": "0.70.4",
     "react-native-device-info": "^0.22.6",
     "react-native-fs": "^2.11.17",
     "react-native-image-picker": "^0.28.0",
